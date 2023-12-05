@@ -8,19 +8,14 @@ class Followers(db.model):
     __tablename__ = 'followers'
 
     # Columns for followers Table
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), primary_key=True)
+    follower_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    following_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
 
     # Relationships
-
+    follower = db.relationship('User', back_populates='followers', foreign_keys=[follower_id])
+    following = db.relationship('User', back_populates='followings', foreign_keys=[following_id])
     
-    # Associations
-
-
     # Validations
-
-
-    # Password hashing
 
 
     # repr

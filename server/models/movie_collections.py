@@ -14,15 +14,10 @@ class MovieCollection(db.model):
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'))
 
     # Relationships
-
-    
-    # Associations
-
+    user = db.relationship('User', back_populates='movie_collections')
+    movie = db.relationship('Movie', back_populates='movie_collections')
 
     # Validations
-
-
-    # Password hashing
 
 
     # repr

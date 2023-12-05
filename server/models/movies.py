@@ -17,15 +17,12 @@ class Movie(db.model):
     summary = db.Column(db.String)
 
     # Relationships
-
+    movie_collections = db.relationship('MovieCollection', back_populates='movie', cascade='all, delete-orphan')
     
     # Associations
-
+    users = association_proxy('movie_collections', 'user')
 
     # Validations
-
-
-    # Password hashing
 
 
     # repr

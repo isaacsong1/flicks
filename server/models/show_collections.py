@@ -14,15 +14,10 @@ class ShowCollection(db.model):
     show_id = db.Column(db.Integer, db.ForeignKey('shows.id'))
 
     # Relationships
-
-    
-    # Associations
-
+    user = db.relationship('User', back_populates='movie_collections')
+    show = db.relationship('Show', back_populates='show_collections')
 
     # Validations
-
-
-    # Password hashing
 
 
     # repr

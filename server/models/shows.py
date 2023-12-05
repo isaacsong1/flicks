@@ -15,18 +15,14 @@ class Show(db.model):
     director = db.Column(db.String)
     genres = db.Column(db.String)
     summary = db.Column(db.String)
-    
 
     # Relationships
-
+    show_collections = db.relationship('ShowCollection', back_populates='show', cascade='all, delete-orphan')
     
     # Associations
-
+    users = association_proxy('show_collections', 'user')
 
     # Validations
-
-
-    # Password hashing
 
 
     # repr
