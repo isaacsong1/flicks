@@ -12,7 +12,6 @@ class Movie(db.Model):
     title = db.Column(db.String)
     image = db.Column(db.String)
     rating = db.Column(db.String)
-    duration = db.Column(db.String)
     director = db.Column(db.String)
     genres = db.Column(db.String)
     summary = db.Column(db.String)
