@@ -4,7 +4,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from app_setup import bcrypt
 from sqlalchemy.ext.associationproxy import association_proxy
 
-class User(db.model):
+class User(db.Model):
     __tablename__ = 'users'
 
     # Columns for users Table
@@ -19,10 +19,25 @@ class User(db.model):
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     # Relationships
+    movie_collections = db.relationship('MovieCollection', back_populates='user', cascade='all, delete-orphan')
+    show_collections = db.relationship('ShowCollection', back_populates='user', cascade='all, delete-orphan')
+    #! User's followers -> Through Follower class, connect the following column and find user ID that matches you for users following YOU 
+    followers = db.relationship(
+                    'Follower', back_populates='following', 
+                    foreign_keys='Follower.following_id', 
+                    cascade='all, delete-orphan'
+                )
+    #! User's following -> Through Follower class, connect the follower column and find user ID that matches you for users that have YOU as a follower
+    followings = db.relationship(
+                    'Follower', back_populates='follower', 
+                    foreign_keys='Follower.follower_id', 
+                    cascade='all, delete-orphan'
+                )
 
     
     # Associations
-
+    movies = association_proxy('movie_collections', 'movie')
+    shows = association_proxy('show_collections', 'show')
 
     # Validations
 

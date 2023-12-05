@@ -4,23 +4,18 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from app_setup import bcrypt
 from sqlalchemy.ext.associationproxy import association_proxy
 
-class Followers(db.model):
+class Follower(db.Model):
     __tablename__ = 'followers'
 
     # Columns for followers Table
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), primary_key=True)
+    follower_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    following_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
 
     # Relationships
-
+    follower = db.relationship('User', back_populates='followers', foreign_keys=[follower_id])
+    following = db.relationship('User', back_populates='followings', foreign_keys=[following_id])
     
-    # Associations
-
-
     # Validations
-
-
-    # Password hashing
 
 
     # repr

@@ -4,7 +4,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from app_setup import bcrypt
 from sqlalchemy.ext.associationproxy import association_proxy
 
-class Show(db.model):
+class Show(db.Model):
     __tablename__ = 'shows'
 
     # Columns for shows Table
@@ -15,18 +15,14 @@ class Show(db.model):
     director = db.Column(db.String)
     genres = db.Column(db.String)
     summary = db.Column(db.String)
-    
 
     # Relationships
-
+    show_collections = db.relationship('ShowCollection', back_populates='show', cascade='all, delete-orphan')
     
     # Associations
-
+    users = association_proxy('show_collections', 'user')
 
     # Validations
-
-
-    # Password hashing
 
 
     # repr

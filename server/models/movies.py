@@ -4,7 +4,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from app_setup import bcrypt
 from sqlalchemy.ext.associationproxy import association_proxy
 
-class Movie(db.model):
+class Movie(db.Model):
     __tablename__ = 'movies'
 
     # Columns for movies Table
@@ -17,15 +17,12 @@ class Movie(db.model):
     summary = db.Column(db.String)
 
     # Relationships
-
+    movie_collections = db.relationship('MovieCollection', back_populates='movie', cascade='all, delete-orphan')
     
     # Associations
-
+    users = association_proxy('movie_collections', 'user')
 
     # Validations
-
-
-    # Password hashing
 
 
     # repr
