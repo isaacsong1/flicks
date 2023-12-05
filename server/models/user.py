@@ -40,7 +40,38 @@ class User(db.Model):
     shows = association_proxy('show_collections', 'show')
 
     # Validations
+    @validates("username")
+    def validate_username(self, _, value):
+        if not isinstance(value, str):
+            raise TypeError(f"Username must be a string")
+        elif len(value) < 3 or len(value) > 20:
+            raise ValueError(f"Username must be between 3 and 20 characters")
+        return value
 
+    @validates("email")
+    def validate_email(self, _, value):
+        if not isinstance(value, str):
+            raise TypeError(f"Email must be a string")
+        elif len(value) < 2 or len(value) > 256:
+            raise ValueError(f"Email must be between 2 and 256 characters")
+        return value
+    
+    @validates("bio")
+    def validate_bio(self, _, value):
+        if not isinstance(value, str):
+            raise TypeError(f"Bio must be a string")
+        elif len(value) < 2 or len(value) > 100:
+            raise ValueError(f"Bio must be between 5 and 100 characters")
+        return value
+
+    # add later
+    # @validates("genres")
+    # def validate_genres(self, _, value):
+    #     if not isinstance(value, str):
+    #         raise TypeError(f"Genres must be a string")
+    #     elif len(value) < 2 or len(value) > 20:
+    #         raise ValueError(f"Genres must be between 2 and 20 characters")
+    #     return value
 
     # Password hashing
     @hybrid_property

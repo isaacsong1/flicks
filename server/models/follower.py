@@ -16,7 +16,7 @@ class Follower(db.Model):
     following = db.relationship('User', back_populates='followings', foreign_keys=[following_id])
     
     # Validations
-
+    
 
     # repr
     def __repr__(self):
