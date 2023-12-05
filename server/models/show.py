@@ -23,7 +23,20 @@ class Show(db.Model):
     users = association_proxy('show_collections', 'user')
 
     # Validations
-
+    @validates('title', 'image')
+    def validate_title(self, key, value):
+        if not isinstance(value, str):
+            if key == 'title':
+                raise TypeError(f'Title must be a string')
+            else:
+                raise TypeError(f'Image must be a string')
+        return value
+    
+    @validates('rating')
+    def validate_rating(self, _, value):
+        if not isinstance(value, float):
+            raise TypeError(f'Rating must be a float')
+        return value
 
     # repr
     def __repr__(self):
