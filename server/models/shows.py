@@ -4,7 +4,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from app_setup import bcrypt
 from sqlalchemy.ext.associationproxy import association_proxy
 
-class Show(db.model):
+class Show(db.Model):
     __tablename__ = 'shows'
 
     # Columns for shows Table

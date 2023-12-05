@@ -4,7 +4,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from app_setup import bcrypt
 from sqlalchemy.ext.associationproxy import association_proxy
 
-class Movie(db.model):
+class Movie(db.Model):
     __tablename__ = 'movies'
 
     # Columns for movies Table

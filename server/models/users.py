@@ -4,7 +4,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from app_setup import bcrypt
 from sqlalchemy.ext.associationproxy import association_proxy
 
-class User(db.model):
+class User(db.Model):
     __tablename__ = 'users'
 
     # Columns for users Table
