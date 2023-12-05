@@ -8,7 +8,8 @@ class Followers(db.model):
     __tablename__ = 'followers'
 
     # Columns for followers Table
-
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), primary_key=True)
 
     # Relationships
 
