@@ -10,6 +10,7 @@ class Movie(db.Model):
     # Columns for movies Table
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
+    image = db.Column(db.String)
     rating = db.Column(db.String)
     duration = db.Column(db.String)
     director = db.Column(db.String)
