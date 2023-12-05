@@ -1,8 +1,7 @@
 from sqlalchemy.orm import validates
 from app_setup import db
-from sqlalchemy.ext.hybrid import hybrid_property
-from app_setup import bcrypt
-from sqlalchemy.ext.associationproxy import association_proxy
+from models.user import User
+from models.movie import Movie
 
 class MovieCollection(db.Model):
     __tablename__ = 'movie_collections'
@@ -18,7 +17,27 @@ class MovieCollection(db.Model):
     movie = db.relationship('Movie', back_populates='movie_collections')
 
     # Validations
+    @validates('name')
+    def validate_name(self, _, value):
+        if not isinstance(value, str):
+            raise TypeError(f'Name of movie collection must be a string')
+        elif len(value) < 3 or len(value) > 20:
+            raise ValueError(f'Name of movie collection must be between 3 and 20 characters')
+        return value
 
+    @validates('user_id')
+    def validate_userid(self, _, value):
+        if value and db.session.get(User, value):
+            return value
+        else:
+            raise ValueError('User ID must be from a valid user')
+    
+    @validates('movie_id')
+    def validate_movieid(self, _, value):
+        if value and db.session.get(Movie, value):
+            return value
+        else:
+            raise ValueError('Movie ID must be from a valid movie')
 
     # repr
     def __repr__(self):
