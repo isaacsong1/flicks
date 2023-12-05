@@ -8,7 +8,13 @@ class Movie(db.model):
     __tablename__ = 'movies'
 
     # Columns for movies Table
-
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String)
+    rating = db.Column(db.String)
+    duration = db.Column(db.String)
+    director = db.Column(db.String)
+    genres = db.Column(db.String)
+    summary = db.Column(db.String)
 
     # Relationships
 
