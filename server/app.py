@@ -16,6 +16,7 @@ from models.movie_collection import MovieCollection
 from models.show_collection import ShowCollection
 
 # Views go here!
+# test branch protection
 
 @app.route('/')
 def index():
