@@ -8,12 +8,12 @@ from flask import request
 from flask_restful import Resource
 
 # Add your model imports
-from models.user import User
-from models.follower import Follower
-from models.movie import Movie
-from models.show import Show
-from models.movie_collection import MovieCollection
-from models.show_collection import ShowCollection
+# from models.user import User
+# from models.follower import Follower
+# from models.movie import Movie
+# from models.show import Show
+# from models.movie_collection import MovieCollection
+# from models.show_collection import ShowCollection
 
 # Route imports
 #! Authentication
@@ -22,6 +22,7 @@ from routes.auth.login import Login
 from routes.auth.logout import Logout
 from routes.auth.register import Register
 #! General routes
+from routes.followers import Followers
 from routes.movie_by_id import MovieById
 from routes.movie_coll_by_id import MovieCollectionById
 from routes.movie_collections import MovieCollections
@@ -40,8 +41,9 @@ api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout')
 api.add_resource(Register, '/register')
 #! General routes
+api.add_resource(Followers, '/followers')
 api.add_resource(MovieById, '/movies/<int:id>')
-api.add_resource(MovieCollectionById, 'movie_collections/<int:id>')
+api.add_resource(MovieCollectionById, '/movie_collections/<int:id>')
 api.add_resource(MovieCollections, '/movie_collections')
 api.add_resource(Movies, '/movies')
 api.add_resource(ShowById, '/shows/<int:id>')
