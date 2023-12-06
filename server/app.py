@@ -21,7 +21,10 @@ from routes.auth.login import Login
 from routes.auth.logout import Logout
 from routes.auth.register import Register
 
+from routes.show_by_id import ShowById
 
+
+from routes.shows import Shows
 from routes.user_by_id import UserById
 from routes.users import Users
 
@@ -32,7 +35,10 @@ api.add_resource(Logout, '/logout')
 api.add_resource(Register, '/register')
 
 
+api.add_resource(ShowById, '/shows/<int:id>')
 
+
+api.add_resource(Shows, '/shows')
 api.add_resource(UserById, '/users/<int:id>')
 api.add_resource(Users, '/users')
 
