@@ -21,11 +21,17 @@ from routes.auth.login import Login
 from routes.auth.logout import Logout
 from routes.auth.register import Register
 
+
+from routes.users import Users
+
 # Add resources
 api.add_resource(CheckSession, '/checksession')
 api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout')
 api.add_resource(Register, '/register')
+
+
+api.add_resource(Users, '/users')
 
 # Views go here!
 
