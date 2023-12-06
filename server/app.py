@@ -15,8 +15,19 @@ from models.show import Show
 from models.movie_collection import MovieCollection
 from models.show_collection import ShowCollection
 
+# Route imports
+from routes.auth.check_session import CheckSession
+from routes.auth.login import Login
+from routes.auth.logout import Logout
+from routes.auth.register import Register
+
+# Add resources
+api.add_resource(CheckSession, '/checksession')
+api.add_resource(Login, '/login')
+api.add_resource(Logout, '/logout')
+api.add_resource(Register, '/register')
+
 # Views go here!
-# test branch protection
 
 @app.route('/')
 def index():
