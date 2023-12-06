@@ -1,7 +1,5 @@
 from sqlalchemy.orm import validates
 from app_setup import db
-from sqlalchemy.ext.hybrid import hybrid_property
-from app_setup import bcrypt
 from sqlalchemy.ext.associationproxy import association_proxy
 
 class Movie(db.Model):
@@ -23,7 +21,20 @@ class Movie(db.Model):
     users = association_proxy('movie_collections', 'user')
 
     # Validations
-
+    @validates('title', 'image')
+    def validate_title(self, key, value):
+        if not isinstance(value, str):
+            if key == 'title':
+                raise TypeError(f'Title must be a string')
+            else:
+                raise TypeError(f'Image must be a string')
+        return value
+    
+    @validates('rating')
+    def validate_rating(self, _, value):
+        if not isinstance(value, float):
+            raise TypeError(f'Rating must be a float')
+        return value
 
     # repr
     def __repr__(self):
