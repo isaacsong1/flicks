@@ -25,10 +25,12 @@ from routes.auth.register import Register
 from routes.followers import Followers
 from routes.movie_by_id import MovieById
 from routes.movie_coll_by_id import MovieCollectionById
+from routes.movie_coll_by_name import MovieCollectionByName
 from routes.movie_collections import MovieCollections
 from routes.movies import Movies
 from routes.show_by_id import ShowById
 from routes.show_coll_by_id import ShowCollectionById
+from routes.show_coll_by_name import ShowCollectionByName
 from routes.show_collections import ShowCollections
 from routes.shows import Shows
 from routes.user_by_id import UserById
@@ -44,10 +46,12 @@ api.add_resource(Register, '/register')
 api.add_resource(Followers, '/followers')
 api.add_resource(MovieById, '/movies/<int:id>')
 api.add_resource(MovieCollectionById, '/movie_collections/<int:id>')
+api.add_resource(MovieCollectionById, '/movie_collections/<string:name>')
 api.add_resource(MovieCollections, '/movie_collections')
 api.add_resource(Movies, '/movies')
 api.add_resource(ShowById, '/shows/<int:id>')
 api.add_resource(ShowCollectionById, '/show_collections/<int:id>')
+api.add_resource(ShowCollectionByName, '/show_collections/<string:name>')
 api.add_resource(ShowCollections, '/show_collections')
 api.add_resource(Shows, '/shows')
 api.add_resource(UserById, '/users/<int:id>')
