@@ -1,9 +1,11 @@
 from .. import request, session, Resource
 from models.user import User
 from schemas.user_schema import UserSchema
+from schemas.movie_coll_schema import MovieCollectionSchema
 from app_setup import db
 
 user_schema = UserSchema(session=db.session)
+movie_collection_schema = MovieCollectionSchema(session=db.session)
 
 class Register(Resource):
     def post(self):
@@ -17,6 +19,8 @@ class Register(Resource):
             # Hash password
             new_user.password_hash = request.json.get('password')
             db.session.add(new_user)
+            db.session.commit()
+
             # Add user id to cookies
             session['user_id'] = new_user.id
             serialized_user = user_schema.dump(new_user)

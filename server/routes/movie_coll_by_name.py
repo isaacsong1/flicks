@@ -8,10 +8,9 @@ movie_collection_schema = MovieCollectionSchema(many=True, session=db.session)
 # Get a collection, Update collection, Delete collection
 class MovieCollectionByName(Resource):
     def get(self, name):
-        if movie_collection := db.session.get(MovieCollection, name):
+        if movie_collection := MovieCollection.query.where(MovieCollection.name == name):
             return movie_collection_schema.dump(movie_collection), 200
-        return {'error': 'Could not find that movie collection with that name'}, 404
-
+        
     def patch(self, name):
         if movie_collection := db.session.get(MovieCollection, name):
             try:
