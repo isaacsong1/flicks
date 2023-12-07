@@ -1,4 +1,5 @@
 from . import request, session, Resource
+from sqlalchemy.sql import and_, or_
 from models.movie_collection import MovieCollection
 from schemas.movie_coll_schema import MovieCollectionSchema
 from app_setup import db
@@ -7,12 +8,12 @@ movie_collection_schema = MovieCollectionSchema(many=True, session=db.session)
 
 # Get a collection, Update collection, Delete collection
 class MovieCollectionByName(Resource):
-    def get(self, name):
-        if movie_collection := MovieCollection.query.where(MovieCollection.name == name):
+    def get(self, id, name):
+        if movie_collection := MovieCollection.query.filter(and_(MovieCollection.user_id == id, MovieCollection.name == name)):
             return movie_collection_schema.dump(movie_collection), 200
         
     def patch(self, name):
-        if movie_collection := db.session.get(MovieCollection, name):
+        if movie_collection := MovieCollection.query.filter(and_(MovieCollection.user_id == id, MovieCollection.name == name)):
             try:
                 # Get user input data
                 data = request.json

@@ -109,11 +109,13 @@ if __name__ == '__main__':
 
         print('Seeding movie collections...')
         mc = MovieCollection(name='main', user_id=users[0].id, movie_id=movies[3].id)
+        mc5 = MovieCollection(name='main', user_id=users[0].id, movie_id=movies[2].id)
+        mc6 = MovieCollection(name='main', user_id=users[0].id, movie_id=movies[1].id)
         mc1 = MovieCollection(name='favs', user_id=users[0].id, movie_id=movies[1].id)
         mc4 = MovieCollection(name='favs', user_id=users[0].id, movie_id=movies[3].id)
         mc2 = MovieCollection(name='main', user_id=users[6].id, movie_id=movies[2].id)
         mc3 = MovieCollection(name='main', user_id=users[7].id, movie_id=movies[1].id)
-        db.session.add_all([mc, mc1, mc2, mc3, mc4])
+        db.session.add_all([mc, mc1, mc2, mc3, mc4, mc5, mc6])
         db.session.commit()
 
         print('Seeding show collections...')
