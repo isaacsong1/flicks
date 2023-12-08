@@ -12,10 +12,17 @@ import os
 load_dotenv()  # take environment variables from .env.
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_ECHO"] = True
-app.secret_key = os.environ.get("APP_SECRET")
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = True
+app.secret_key = os.environ.get('APP_SECRET')
+app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
+
+app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies', 'json']
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=3)
+app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(minutes=30)
+app.config['JWT_COOKIE_CSRF_PROTECT'] = True
+
 
 #! flask-sqlalchemy setup
 db = SQLAlchemy(app)
@@ -27,3 +34,5 @@ ma = Marshmallow(app)
 bcrypt = Bcrypt(app)
 #! flask-restful setup
 api = Api(app)
+#! flask-jwt-extended setup
+jwt = JWTManager(app)
