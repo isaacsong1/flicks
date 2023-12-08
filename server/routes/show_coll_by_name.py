@@ -1,4 +1,5 @@
 from . import request, session, Resource
+from sqlalchemy.sql import and_, or_
 from models.show_collection import ShowCollection
 from schemas.show_coll_schema import ShowCollectionSchema
 from app_setup import db
@@ -8,12 +9,12 @@ show_collection_schema = ShowCollectionSchema(many=True, session=db.session)
 # Get a collection, Update collection, Delete collection
 class ShowCollectionByName(Resource):
     def get(self, name):
-        if show_collection := db.session.get(ShowCollection, name):
+        if show_collection := ShowCollection.query.filter(and_(ShowCollection.user_id == id, ShowCollection.name == name)):
             return show_collection_schema.dump(show_collection), 200
         return {'error': 'Could not find that show collection with that name'}, 404
 
     def patch(self, name):
-        if show_collection := db.session.get(ShowCollection, name):
+        if show_collection := ShowCollection.query.filter(and_(ShowCollection.user_id == id, ShowCollection.name == name)):
             try:
                 # Get user input data
                 data = request.json
@@ -32,7 +33,7 @@ class ShowCollectionByName(Resource):
         return {'error': 'Could not find show collection with that name'}, 404
 
     def delete(self, name):
-        if show_collection := db.session.get(ShowCollection, name):
+        if show_collection := ShowCollection.query.filter(and_(ShowCollection.user_id == id, ShowCollection.name == name)):
             try:
                 db.session.delete(show_collection)
                 db.session.commit()

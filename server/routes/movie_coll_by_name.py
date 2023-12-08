@@ -32,7 +32,7 @@ class MovieCollectionByName(Resource):
         return {'error': 'Could not find movie collection with that name'}, 404
 
     def delete(self, name):
-        if movie_collection := db.session.get(MovieCollection, name):
+        if movie_collection := MovieCollection.query.filter(and_(MovieCollection.user_id == id, MovieCollection.name == name)):
             try:
                 db.session.delete(movie_collection)
                 db.session.commit()

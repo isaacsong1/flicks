@@ -10,6 +10,7 @@ class UserById(Resource):
     def get(self, id):
         if user := db.session.get(User, id):
             # user_schema = UserSchema()
+            # import ipdb; ipdb.set_trace()
             return user_schema.dump(user), 200
         return {'error': 'Could not find that user'}, 404
 

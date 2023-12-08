@@ -7,3 +7,5 @@ class FollowerSchema(ma.SQLAlchemySchema):
         model = Follower
         load_instance = True
         fields = ['follower_id', 'following_id']
+
+    users = fields.List(fields.Nested('UserSchema', only=('id', 'username')))
