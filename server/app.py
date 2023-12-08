@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
 # Local imports
-from app_setup import app, api
+from app_setup import app, db, api, jwt
 
 # Remote library imports
 from flask import request
 from flask_restful import Resource
 
 # Add your model imports
-# from models.user import User
+from models.user import User
 # from models.follower import Follower
 # from models.movie import Movie
 # from models.show import Show
@@ -17,10 +17,12 @@ from flask_restful import Resource
 
 # Route imports
 #! Authentication
-from routes.auth.check_session import CheckSession
+# from routes.auth.check_session import CheckSession
 from routes.auth.login import Login
 from routes.auth.logout import Logout
 from routes.auth.register import Register
+from routes.auth.refresh import Refresh
+from routes.auth.current_user import CurrentUser
 #! General routes
 from routes.followers import Followers
 from routes.movie_by_id import MovieById
@@ -38,10 +40,12 @@ from routes.users import Users
 
 # Add resources
 #! Authentication
-api.add_resource(CheckSession, '/checksession')
+# api.add_resource(CheckSession, '/checksession')
 api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout')
 api.add_resource(Register, '/register')
+api.add_resource(Refresh, '/refresh')
+api.add_resource(CurrentUser, '/currentuser')
 #! General routes
 api.add_resource(Followers, '/followers')
 api.add_resource(MovieById, '/movies/<int:id>')
@@ -57,7 +61,14 @@ api.add_resource(Shows, '/shows')
 api.add_resource(UserById, '/users/<int:id>')
 api.add_resource(Users, '/users')
 
-# Views go here!
+# Register a callback function that loads a user from your database whenever 
+# a protected route is accessed. This should return any python object on a 
+# successful lookup, or None if the lookup failed for any reason
+# (For ex: if a user has been deleted from the database)
+@jwt.user_lookup_loader
+def user_lookup_callback(_jwt_header, jwt_data):
+    identity = jwt_data['sub']
+    return db.session.get(User, identity)
 
 @app.route('/')
 def index():
