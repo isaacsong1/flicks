@@ -30,4 +30,4 @@ class Follower(db.Model):
 
     # repr
     def __repr__(self):
-        return f'<Follower #{self.id} >'
+        return f'<Follower #{self.follower_id} Following #{self.following_id} >'
