@@ -3,7 +3,8 @@ import { getToken, getRefreshToken } from '../../utils/main';
 
 // https://redux-toolkit.js.org/api/createslice
 // lots of good information here
-
+// Some actions:
+// setUser, logout, addError, clearErrors, fetchCurrentUser, fetchRegister
 
 export const createSlice = buildCreateSlice({
     creators: { asyncThunk: asyncThunkCreator },
@@ -32,3 +33,7 @@ const userSlice = createSlice({
         },
     }
 });
+
+export const {setUser, logout, addError, clearErrors, fetchCurrentUser, fetchRegister} = userSlice.actions
+export const {selectUser, selectErrors} = userSlice.selectors
+export default userSlice.reducer
