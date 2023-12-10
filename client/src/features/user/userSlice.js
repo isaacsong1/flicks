@@ -1,6 +1,10 @@
 import { buildCreateSlice, asyncThunkCreator } from '@reduxjs/toolkit';
 import { getToken, getRefreshToken } from '../../utils/main';
 
+// https://redux-toolkit.js.org/api/createslice
+// lots of good information here
+
+
 export const createSlice = buildCreateSlice({
     creators: { asyncThunk: asyncThunkCreator },
 });
