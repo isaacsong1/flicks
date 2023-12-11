@@ -18,18 +18,18 @@ const initialState = {
 
 const register = async ({url, values}, ) => {
     try {
-        const response = await fetch(url, {
+        const resp = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(values)
         });
-        const data = await response.json()
-        if (response.ok) {
+        const data = await resp.json()
+        if (resp.ok) {
             return data;
         } else {
-            throw data.message;
+            throw data.message || data.msg;
         }
     } catch (error) {
         return error;
@@ -38,26 +38,26 @@ const register = async ({url, values}, ) => {
 
 const fetchMe = async () => {
     try {
-        const response = await fetch('/currentuser', {
+        const resp = await fetch('/currentuser', {
             headers: {
                 'Authorization': `Bearer ${getToken()}`
             }
         })
-        const data = await response.json()
-        if (response.ok) {
+        const data = await resp.json()
+        if (resp.ok) {
             return {user: data, flag: 'currentuser'};
         } else {
-            const response = await fetch('refresh', {
+            const resp = await fetch('refresh', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${getRefreshToken()}`
                 }
             })
-            const data = await response.json()
-            if (response.ok) {
+            const data = await resp.json()
+            if (resp.ok) {
                 return {...data, flag: 'refresh'};
             } else {
-                throw data.message;
+                throw data.message || data.msg;
             }
         }
     } catch (error) {
@@ -80,9 +80,11 @@ const userSlice = createSlice({
         }),
         addError: create.reducer((state, action) => {
             state.errors.push(action.payload);
+            state.loading = false;
         }),
         clearErrors: create.reducer((state) => {
             state.errors = [];
+            state.loading = false;
         }),
         fetchRegister: create.asyncThunk(
             register,
