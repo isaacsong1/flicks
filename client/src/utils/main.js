@@ -2,6 +2,7 @@ export const getToken = () => localStorage.getItem("jwt_token");
 export const getRefreshToken = () => localStorage.getItem("refresh_token");
 export const setToken = (token) => localStorage.setItem("jwt_token", token);
 export const setRefreshToken = (token) => localStorage.setItem("refresh_token", token);
+
 export const checkToken = async () => {
     try {    
         const resp = await fetch("/check", {
@@ -29,6 +30,7 @@ export const checkToken = async () => {
         return error
     }
 }
+
 export const postRefreshToken = async () => {
     const resp = await fetch("/refresh", {
         method: "POST",
