@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Switch, Route } from "react-router-dom";
+import React, { useEffect, useState, useCallback } from "react";
+import { Route, Switch } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCurrentUser } from './features/user/userSlice';
+import { clearErrors as clearUserErrors} from './features/user/userSlice';
+import { setToken } from './utils/main';
+import AllMedia from './pages/AllMedia';
+import Naviation from './components/Navigation';
 
 // Goal for tomorrow:
 // Create userSlice and understand it
@@ -21,7 +27,40 @@ import { Switch, Route } from "react-router-dom";
 // Connect page with option to follow
 
 function App() {
-  return <h1>Project Client</h1>;
+  const user = useSelector(state => state.user.data);
+  const userErrors = useSelector(state => state.user.errors);
+  const dispatch = useDispatch()
+  const errors = [...userErrors];
+  const clearErrorsAction = useCallback(() => {
+    dispatch(clearUserErrors(''));
+  }, [dispatch, clearUserErrors]);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     if (!user) {
+  //       const action = await dispatch(fetchCurrentUser());
+  //       if (typeof action.payload !== 'string') {
+  //         if (action.payload.flag === 'refresh') {
+  //           setToken(action.payload.jwt_token);
+  //         }
+  //         // dispatch(fetchAllMovies());
+  //       }
+  //     }
+  //   })()
+  // }, [user]);
+
+  // useEffect(() => {
+  //   if (errors.length) {
+  //     clearErrorsAction()
+  //   }
+  // }, [errors, clearErrorsAction]);
+
+  if (!user) return (
+    <>
+      <Naviation />
+      <AllMedia />
+    </>
+  )
 }
 
 export default App;

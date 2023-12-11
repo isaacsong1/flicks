@@ -1,6 +1,7 @@
-import App from "./App";
-import Authentication from "./pages/authentication";
-import Error404 from "./pages/error404";
+import App from './App';
+import Authentication from './pages/authentication';
+import Error404 from './pages/error404';
+import AllMedia from './pages/AllMedia';
 
 // What routing will look like:
 // Upon directing to flicks => All movie directory (with option to select shows)
@@ -8,20 +9,36 @@ import Error404 from "./pages/error404";
 
 const routes = [
     {
-        path: "/",
+        path: '/',
         element: <App />,
         errorElement: <Error404 />,
         children: [
             // {
-            //   path: "/",
+            //   path: '/',
             //   index: true,
             //   element: <HomePage />,
             // },
             {
-                path: "/",
-                element: <Authentication />
+                path: '/',
+                element: <AllMedia />
             },
-
+            // {
+            //     path: '/discover',
+            //     // element: <AllMedia />
+            // },
+            // {
+            //     path: '/connect',
+            //     // element: <AllMedia />
+            // },
+            // {
+            //     path: '/users/:id/mycollection',
+            //     // element: <AllMedia />
+            // },
+            // {
+            //     path: '/users/:id/profile',
+            //     // element: <AllMedia />
+            // },
+            
         ],
     },
 ];
