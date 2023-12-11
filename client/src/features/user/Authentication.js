@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 // import { useOutletContext } from "react-router-dom";
-import { useFormik } from "formik"
-import * as yup from "yup"
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { useDispatch } from 'react-redux';
+import { fetchRegister } from './userSlice';
+import { setToken, setRefreshToken } from '../../utils/main';
 // import * as snackbar from "snackbar";
 import "../styles/authentication.css";
 
-function Authentication({ updateUser, handleNewAlert, handleAlertType }) {
+function Authentication() {
     const [signUp, setSignUp] = useState(false);
+    const dispatch = useDispatch();
   // const history = useHistory();
 
     const handleClick = () => setSignUp((signUp) => !signUp);
@@ -40,31 +44,16 @@ function Authentication({ updateUser, handleNewAlert, handleAlertType }) {
         password: "",
         },
         validationSchema: signUp ? signUpSchema : logInSchema,
-        onSubmit: (values) => {
-        fetch(url, {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify(values),
-        })
-            .then((resp) => {
-            if (resp.ok) {
-                resp.json().then(updateUser);
-                handleNewAlert("Welcome!");
-                handleAlertType("success");
+        onSubmit: async (values) => {
+            const action = await dispatch(fetchRegister({url, values}))
+            if (typeof action.payload !== 'string') {
+                setToken(action.payload.jwt_token);
+                setRefreshToken(action.payload.refresh_token);
+                // dispatch(fetchAllMovies());
             } else {
-                resp.json().then((errorObj) => {
-                handleNewAlert(errorObj.error);
-                handleAlertType("error");
-                });
+                // show error (toast or snackbar)
             }
-            })
-            .catch((err) => {
-            handleNewAlert(err.error);
-            handleAlertType("error");
-            });
-        },
+        }
     });
     return (
         <div id="account-form">
