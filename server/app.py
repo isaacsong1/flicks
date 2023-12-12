@@ -23,7 +23,7 @@ from routes.auth.logout import Logout
 from routes.auth.register import Register
 from routes.auth.refresh import Refresh
 from routes.auth.current_user import CurrentUser
-from routes.auth.check_token import CheckToken
+from routes.auth.google_auth import GoogleAuth
 #! General routes
 from routes.followers import Followers
 from routes.movie_by_id import MovieById
@@ -47,7 +47,7 @@ api.add_resource(Logout, '/logout')
 api.add_resource(Register, '/register')
 api.add_resource(Refresh, '/refresh')
 api.add_resource(CurrentUser, '/currentuser')
-api.add_resource(CheckToken, '/check')
+api.add_resource(GoogleAuth, '/googleauth')
 #! General routes
 api.add_resource(Followers, '/followers')
 api.add_resource(MovieById, '/movies/<int:id>')
