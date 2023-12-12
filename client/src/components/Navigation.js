@@ -1,31 +1,43 @@
 import React from 'react';
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate  } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../features/user/userSlice';
 
 const Navigation = () => {
+    const user = useSelector(state => state.user.data);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        fetch('/logout', { method: 'DELETE' })
+        .then(() => {
+            dispatch(logout());
+            navigate('/');
+        })
+        .catch(error => console.log(error))
+    }
+
     return (
-        <nav className='navbar'>
+        <nav class='navbar'>
             <div>
-                <NavLink className='link' to={'/'}>
-                    Home
-                </NavLink>
-                {/* <NavLink className='link' >
+                <NavLink class='link' to={"/discover"} >
                     Discover
                 </NavLink>
-                <NavLink className='link' >
+                <NavLink class='link' to={"/connect"} >
                     Connect
                 </NavLink>
-                <NavLink className='link' >
+                <NavLink class='link' to={`/users/${user.id}/mycollection`} >
                     My Collection
-                </NavLink> */}
+                </NavLink>
             </div>
-            {/* <div>
-                <NavLink className='link logout' to={'/'}>
+            <div>
+                <NavLink class='link logout' to={'/'} onClick={handleLogout} >
                     Logout
                 </NavLink>
-                <NavLink className='link profile' >
+                <NavLink class='link profile' to={`/users/${user.id}/profile`} >
                     View Profile
                 </NavLink>
-            </div> */}
+            </div>
         </nav>
     )
 }

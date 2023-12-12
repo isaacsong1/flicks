@@ -1,7 +1,11 @@
 import App from './App';
-import Authentication from './pages/authentication';
-import Error404 from './pages/error404';
-import AllMedia from './pages/AllMedia';
+import Authentication from './features/user/Authentication';
+import ErrorPage from './pages/ErrorPage';
+// import AllMedia from './pages/AllMedia';
+import Discover from './pages/Discover';
+import Connect from './pages/Connect';
+import MyCollection from './pages/MyCollection';
+import Profile from './pages/Profile';
 
 // What routing will look like:
 // Upon directing to flicks => All movie directory (with option to select shows)
@@ -11,34 +15,32 @@ const routes = [
     {
         path: '/',
         element: <App />,
-        errorElement: <Error404 />,
+        errorElement: <ErrorPage />,
         children: [
-            // {
-            //   path: '/',
-            //   index: true,
-            //   element: <HomePage />,
-            // },
             {
                 path: '/',
-                element: <AllMedia />
+                element: <Authentication />
             },
             // {
-            //     path: '/discover',
-            //     // element: <AllMedia />
+            //     path: '/',
+            //     element: <AllMedia />
             // },
-            // {
-            //     path: '/connect',
-            //     // element: <AllMedia />
-            // },
-            // {
-            //     path: '/users/:id/mycollection',
-            //     // element: <AllMedia />
-            // },
-            // {
-            //     path: '/users/:id/profile',
-            //     // element: <AllMedia />
-            // },
-            
+            {
+                path: '/discover',
+                element: <Discover />,
+            },
+            {
+                path: '/connect',
+                element: <Connect />,
+            },
+            {
+                path: '/users/:id/mycollection',
+                element: <MyCollection />,
+            },
+            {
+                path: '/users/:id/profile',
+                element: <Profile />,
+            },
         ],
     },
 ];

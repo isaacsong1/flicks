@@ -9,10 +9,9 @@ class Show(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
     image = db.Column(db.String)
-    rating = db.Column(db.String)
-    director = db.Column(db.String)
-    genres = db.Column(db.String)
-    summary = db.Column(db.String)
+    rating = db.Column(db.Float)
+    # genres = db.Column(db.String)
+    description = db.Column(db.String)
 
     # Relationships
     show_collections = db.relationship('ShowCollection', back_populates='show', cascade='all, delete-orphan')
@@ -32,8 +31,8 @@ class Show(db.Model):
     
     @validates('rating')
     def validate_rating(self, _, value):
-        if not isinstance(value, float):
-            raise TypeError(f'Rating must be a float')
+        if not (isinstance(value, float) or isinstance(value, int)):
+            raise TypeError(f'Rating must be a number')
         return value
 
     # repr

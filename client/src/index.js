@@ -1,17 +1,20 @@
 import React from "react";
-import App from "./App";
+// import App from "./App";
 import "./index.css";
+// import ReactDOM from "react-dom/client";
 import { createRoot } from "react-dom/client";
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { store } from './app/store';
+import routes from './routes';
+// import Navigation from './components/Navigation';
 
-const container = document.getElementById("root");
-const root = createRoot(container);
+// const router = createBrowserRouter(routes);
+const router = createBrowserRouter(routes);
+
+const root = createRoot(document.getElementById("root"));
 root.render(
     <Provider store={store}>
-        <Router>
-            <App />
-        </Router>
+        <RouterProvider router={router} />
     </Provider>
 );
