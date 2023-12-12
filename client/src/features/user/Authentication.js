@@ -2,14 +2,17 @@ import React, { useState } from "react";
 // import { useOutletContext } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import { fetchRegister } from './userSlice';
 import { setToken, setRefreshToken } from '../../utils/main';
 // import * as snackbar from "snackbar";
-import "../styles/authentication.css";
+import "../../styles/authentication.css";
 
 function Authentication() {
+    const navigate = useNavigate();
     const [signUp, setSignUp] = useState(false);
+    const user = useSelector(state => state.user.data);
     const dispatch = useDispatch();
   // const history = useHistory();
 
@@ -47,8 +50,9 @@ function Authentication() {
         onSubmit: async (values) => {
             const action = await dispatch(fetchRegister({url, values}))
             if (typeof action.payload !== 'string') {
-                setToken(action.payload.jwt_token);
-                setRefreshToken(action.payload.refresh_token);
+                // setToken(action.payload.jwt_token);
+                // setRefreshToken(action.payload.refresh_token);
+                navigate(`/users/${user.id}/mycollection`);
                 // dispatch(fetchAllMovies());
             } else {
                 // show error (toast or snackbar)
@@ -58,7 +62,7 @@ function Authentication() {
     return (
         <div id="account-form">
             <div id='content'>
-                <h1>Welcome to Virtual Planner</h1>
+                <h1>Flicks</h1>
                 <div id="register-switch">
                     {/* {signUp ? <h2>Create your free account</h2> : <h2>Log in here</h2>} */}
                     {/* <h3>{signUp ? 'Already a member?' : 'Not a member?'}</h3>

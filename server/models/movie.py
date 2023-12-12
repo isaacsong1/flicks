@@ -10,9 +10,8 @@ class Movie(db.Model):
     title = db.Column(db.String)
     image = db.Column(db.String)
     rating = db.Column(db.String)
-    director = db.Column(db.String)
-    genres = db.Column(db.String)
-    summary = db.Column(db.String)
+    # genres = db.Column(db.String)
+    description = db.Column(db.String)
 
     # Relationships
     movie_collections = db.relationship('MovieCollection', back_populates='movie', cascade='all, delete-orphan')
@@ -32,8 +31,8 @@ class Movie(db.Model):
     
     @validates('rating')
     def validate_rating(self, _, value):
-        if not isinstance(value, float):
-            raise TypeError(f'Rating must be a float')
+        if not isinstance(value, str):
+            raise TypeError(f'Rating must be a string')
         return value
 
     # repr

@@ -27,9 +27,9 @@ const fetchAll = async (url, asyncThunk) => {
     }
 }
 
-const fetchOne = async (coll_id, url, asyncThunk) => {
+const fetchOne = async (url, coll_name, asyncThunk) => {
     try {
-        const resp = await fetch(`${url}/${coll_id}`);
+        const resp = await fetch(`${url}/${coll_name}`);
         const data = await resp.json();
         if (resp.ok) {
             return data;

@@ -1,5 +1,5 @@
 import { buildCreateSlice, asyncThunkCreator } from '@reduxjs/toolkit';
-import { getToken, getRefreshToken } from '../../utils/main';
+import { getCookie } from '../../utils/main';
 
 // https://redux-toolkit.js.org/api/createslice
 // lots of good information here
@@ -40,20 +40,21 @@ const fetchMe = async () => {
     try {
         const resp = await fetch('/currentuser', {
             headers: {
-                'Authorization': `Bearer ${getToken()}`
+                'X-CSRF-TOKEN': getCookie('csrf_access_token'),
+                // 'X-CSRF-TOKEN': getCookie('csrf_refresh_token'),
             }
         })
-        const data = await resp.json()
+        const data = await resp.json();
         if (resp.ok) {
             return {user: data, flag: 'currentuser'};
         } else {
-            const resp = await fetch('refresh', {
+            const resp = await fetch('/refresh', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${getRefreshToken()}`
+                    'X-CSRF-TOKEN': getCookie('csrf_refresh_token'),
                 }
             })
-            const data = await resp.json()
+            const data = await resp.json();
             if (resp.ok) {
                 return {...data, flag: 'refresh'};
             } else {
@@ -101,7 +102,7 @@ const userSlice = createSlice({
                     if (typeof action.payload === 'string') {
                         state.errors.push(action.payload);
                     } else {
-                        state.data = action.payload.user;
+                        state.data = action.payload;
                     }
                 },
             }
@@ -122,7 +123,7 @@ const userSlice = createSlice({
                     if (typeof action.payload === 'string') {
                         state.errors.push(action.payload);
                     } else {
-                        state.data = action.payload.user
+                        state.data = action.payload.user;
                     }
                 }
             }

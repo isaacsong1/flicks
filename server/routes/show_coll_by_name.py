@@ -8,12 +8,12 @@ show_collection_schema = ShowCollectionSchema(many=True, session=db.session)
 
 # Get a collection, Update collection, Delete collection
 class ShowCollectionByName(Resource):
-    def get(self, name):
+    def get(self, id, name):
         if show_collection := ShowCollection.query.filter(and_(ShowCollection.user_id == id, ShowCollection.name == name)):
             return show_collection_schema.dump(show_collection), 200
         return {'error': 'Could not find that show collection with that name'}, 404
 
-    def patch(self, name):
+    def patch(self, id, name):
         if show_collection := ShowCollection.query.filter(and_(ShowCollection.user_id == id, ShowCollection.name == name)):
             try:
                 # Get user input data

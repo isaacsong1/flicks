@@ -12,7 +12,7 @@ class MovieCollectionByName(Resource):
         if movie_collection := MovieCollection.query.filter(and_(MovieCollection.user_id == id, MovieCollection.name == name)):
             return movie_collection_schema.dump(movie_collection), 200
         
-    def patch(self, name):
+    def patch(self, id, name):
         if movie_collection := MovieCollection.query.filter(and_(MovieCollection.user_id == id, MovieCollection.name == name)):
             try:
                 # Get user input data

@@ -1,4 +1,4 @@
-from .. import request, session, Resource
+from .. import request, session, Resource, make_response
 from flask import jsonify
 from models.user import User
 from models.movie_collection import MovieCollection
@@ -47,7 +47,7 @@ class Register(Resource):
             # Serialize the user
             serialized_user = user_schema.dump(new_user)
             # Prepackage the response
-            response = jsonify(serialized_user, 201)
+            response = make_response(serialized_user, 201)
             # Set both cookies on the response - will be sent with every request until unset
             set_access_cookies(response, jwt)
             set_refresh_cookies(response, refresh_token)

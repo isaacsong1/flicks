@@ -15,6 +15,8 @@ from models.show import Show
 from models.movie_collection import MovieCollection
 from models.show_collection import ShowCollection
 
+from media_data import all_media
+
 if __name__ == '__main__':
     fake = Faker()
     with app.app_context():
@@ -86,42 +88,67 @@ if __name__ == '__main__':
         db.session.commit()
 
         print('Seeding movies...')
-        movies = []
-        movie_titles = ['Avatar', 'Spirited Away', 'Interstellar', 'Good Will Hunting']
-        movie_image = 'https://m.media-amazon.com/images/M/MV5BOTI0MzcxMTYtZDVkMy00NjY1LTgyMTYtZmUxN2M3NmQ2NWJhXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_QL75_UX380_CR0,9,380,562_.jpg'
-        movie_ratings = [8.5, 9.0, 8.0, 9.5]
-        for i in range(4):
-            movie = Movie(title=movie_titles[i], image=movie_image, rating=movie_ratings[i])
-            movies.append(movie)
+        movies = all_media.get('movies')
+        for i in movies:
+            # import ipdb; ipdb.set_trace()
+            # movie_title = i.title
+            # movie_image=i.image
+            # movie_rating=i.rating
+            # movie_description=i.description
+            # movie_title = i['title']
+            # movie_image=i['image']
+            # movie_rating=i['rating']
+            # movie_description=i['description']
+            movie_title = i.get('title')
+            movie_image=i.get('image')
+            movie_rating=i.get('rating')
+            movie_description=i.get('description')
+            movie = Movie(title=movie_title, 
+                        image=movie_image, 
+                        rating=movie_rating, 
+                        description=movie_description
+                        )
             db.session.add(movie)
         db.session.commit()
 
         print('Seeding shows...')
-        shows = []
-        show_titles = ['Suits', 'Modern Family', 'Planet Earth', 'Loki']
-        show_image = 'https://m.media-amazon.com/images/M/MV5BMzMyYjg0MGMtMTlkMy00OGFiLWFiNTYtYmFmZWNmMDFlMzkwXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_QL75_UX380_CR0,1,380,562_.jpg'
-        show_ratings = [10.0, 9.0, 8.0, 9.5]
-        for i in range(4):
-            show = Show(title=show_titles[i], image=show_image, rating=show_ratings[i])
-            shows.append(show)
+        shows = all_media.get('shows')
+        for i in shows:
+            # show_title = i.title
+            # show_image=i.image
+            # show_rating=i.rating
+            # show_description=i.description
+            # show_title = i['title']
+            # show_image=i['image']
+            # show_rating=i['rating']
+            # show_description=i['description']
+            show_title = i.get('title')
+            show_image=i.get('image')
+            show_rating=i.get('rating')
+            show_description=i.get('description')
+            show = Show(title=show_title, 
+                        image=show_image, 
+                        rating=show_rating, 
+                        description=show_description
+                        )
             db.session.add(show)
         db.session.commit()
 
         print('Seeding movie collections...')
-        mc = MovieCollection(name='main', user_id=users[0].id, movie_id=movies[3].id)
-        mc5 = MovieCollection(name='main', user_id=users[0].id, movie_id=movies[2].id)
-        mc6 = MovieCollection(name='main', user_id=users[0].id, movie_id=movies[1].id)
-        mc1 = MovieCollection(name='favs', user_id=users[0].id, movie_id=movies[1].id)
-        mc4 = MovieCollection(name='favs', user_id=users[0].id, movie_id=movies[3].id)
-        mc2 = MovieCollection(name='main', user_id=users[6].id, movie_id=movies[2].id)
-        mc3 = MovieCollection(name='main', user_id=users[7].id, movie_id=movies[1].id)
+        mc = MovieCollection(name='main', user_id=users[0].id, movie_id=1)
+        mc5 = MovieCollection(name='main', user_id=users[0].id, movie_id=2)
+        mc6 = MovieCollection(name='main', user_id=users[0].id, movie_id=3)
+        mc1 = MovieCollection(name='favs', user_id=users[0].id, movie_id=4)
+        mc4 = MovieCollection(name='favs', user_id=users[0].id, movie_id=5)
+        mc2 = MovieCollection(name='main', user_id=users[6].id, movie_id=6)
+        mc3 = MovieCollection(name='main', user_id=users[7].id, movie_id=7)
         db.session.add_all([mc, mc1, mc2, mc3, mc4, mc5, mc6])
         db.session.commit()
 
         print('Seeding show collections...')
-        sc = ShowCollection(name='main', user_id=users[0].id, show_id=shows[0].id)
-        sc2 = ShowCollection(name='main', user_id=users[6].id, show_id=shows[1].id)
-        sc3 = ShowCollection(name='main', user_id=users[7].id, show_id=shows[2].id)
+        sc = ShowCollection(name='main', user_id=users[0].id, show_id=1)
+        sc2 = ShowCollection(name='main', user_id=users[6].id, show_id=2)
+        sc3 = ShowCollection(name='main', user_id=users[7].id, show_id=3)
         db.session.add_all([sc, sc2, sc3])
         db.session.commit()
 
