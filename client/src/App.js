@@ -41,8 +41,9 @@ function App() {
           if (action.payload.flag === 'refresh') {
             // setToken(action.payload.jwt_token);
             console.log(action.payload);
+          } else {
+            navigate('/discover');
           }
-          // dispatch(fetchAllMovies());
         }
       } else {
         navigate('/discover');
@@ -55,8 +56,7 @@ function App() {
       clearErrorsAction()
     }
   }, [errors, clearErrorsAction]);
-
-
+  
   if (!user) return (
     <div id='welcome'>
       

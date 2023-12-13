@@ -38,9 +38,10 @@ class GoogleAuth(Resource):
             token = data.get('id_token')
             if not id_token:
                 return {'error': 'ID Token is missing'}, 400
-            # token_bytes = token.encode('utf-8')
             # Verify token and get information
-            id_info = id_token.verify_oauth2_token(token, requests.Request(), CLIENT_ID)
+            token_bytes = token.encode('utf-8')
+            # import ipdb; ipdb.set_trace()
+            id_info = id_token.verify_oauth2_token(token_bytes, requests.Request(), CLIENT_ID)
             # import ipdb; ipdb.set_trace()
             # See if user information exists
             user = User.query.filter(User.email == id_info.get('email')).first()

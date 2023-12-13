@@ -1,11 +1,11 @@
 from .. import request, session, Resource, make_response
 from flask import jsonify
-from models.user import User
-from models.movie_collection import MovieCollection
-from models.show_collection import ShowCollection
+# from models.user import User
+# from models.movie_collection import MovieCollection
+# from models.show_collection import ShowCollection
 from schemas.user_schema import UserSchema
-from schemas.movie_coll_schema import MovieCollectionSchema
-from schemas.show_coll_schema import ShowCollectionSchema
+# from schemas.movie_coll_schema import MovieCollectionSchema
+# from schemas.show_coll_schema import ShowCollectionSchema
 from app_setup import db
 from flask_jwt_extended import (
     create_access_token,
@@ -15,8 +15,8 @@ from flask_jwt_extended import (
 )
 
 user_schema = UserSchema(session=db.session)
-movie_collection_schema = MovieCollectionSchema(session=db.session)
-show_collection_schema = ShowCollectionSchema(session=db.session)
+# movie_collection_schema = MovieCollectionSchema(session=db.session)
+# show_collection_schema = ShowCollectionSchema(session=db.session)
 
 class Register(Resource):
     def post(self):
@@ -35,11 +35,11 @@ class Register(Resource):
             db.session.add(new_user)
             db.session.commit()
             # Create 'main' collection for movies and shows
-            if new_user.id:
-                main_mc = MovieCollection(name='main', user_id=new_user.id)
-                main_sc = ShowCollection(name='main', user_id=new_user.id)
-                db.session.add_all([main_mc, main_sc])
-            db.session.commit()
+            # if new_user.id:
+            #     main_mc = MovieCollection(name='main', user_id=new_user.id)
+            #     main_sc = ShowCollection(name='main', user_id=new_user.id)
+            #     db.session.add_all([main_mc, main_sc])
+            # db.session.commit()
             # Start JWT
             jwt = create_access_token(identity=new_user.id)
             # Manually set refresh token
