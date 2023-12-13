@@ -9,6 +9,7 @@ from schemas.show_coll_schema import ShowCollectionSchema
 from app_setup import db
 from google.auth.transport import requests
 from google.oauth2 import id_token
+import secrets
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
@@ -21,6 +22,11 @@ user_schema = UserSchema(session=db.session)
 movie_collection_schema = MovieCollectionSchema(session=db.session)
 show_collection_schema = ShowCollectionSchema(session=db.session)
 
+def generate_password(length):
+    # Generate random password using secrets
+    password = secrets.token_hex(length // 2)
+    return password[:length]
+
 CLIENT_ID = os.environ.get('G_CLIENT_ID')
 
 class GoogleAuth(Resource):
@@ -32,8 +38,64 @@ class GoogleAuth(Resource):
             token = data.get('id_token')
             if not id_token:
                 return {'error': 'ID Token is missing'}, 400
+            # token_bytes = token.encode('utf-8')
+            # Verify token and get information
+            id_info = id_token.verify_oauth2_token(token, requests.Request(), CLIENT_ID)
+            # import ipdb; ipdb.set_trace()
+            # See if user information exists
+            user = User.query.filter(User.email == id_info.get('email')).first()
+            if user:
+                try:
+                    jwt = create_access_token(identity=user.id)
+                    # Manually set refresh token
+                    refresh_token = create_refresh_token(identity=user.id)
+                    # Serialize the user
+                    serialized_user = user_schema.dump(user)
+                    # Prepackage the response
+                    response = make_response(serialized_user, 200)
+                    # Set both cookies on the response - will be sent along with every request until unset
+                    set_access_cookies(response, jwt)
+                    set_refresh_cookies(response, refresh_token)
+                    return response
+                except Exception as e:
+                    return {'error': 'Invalid credentials'}, 401
+            else:
+                try:
+                    # Get user input data
+                    data = {
+                        "username": id_info.get('given_name', ''), 
+                        'email': id_info.get('email')
+                    }
+                    # Validate user information
+                    user_schema.validate(data)
+                    # Create new user schema
+                    new_user = user_schema.load(data)
+                    # Hash password
+                    new_user.password_hash = generate_password(12)
+                    db.session.add(new_user)
+                    db.session.commit()
+                    # Create 'main' collection for movies and shows
+                    if new_user.id:
+                        main_mc = MovieCollection(name='main', user_id=new_user.id)
+                        main_sc = ShowCollection(name='main', user_id=new_user.id)
+                        db.session.add_all([main_mc, main_sc])
+                    db.session.commit()
+                    # Start JWT
+                    jwt = create_access_token(identity=new_user.id)
+                    # Manually set refresh token
+                    refresh_token = create_refresh_token(identity=new_user.id)
+                    # Serialize the user
+                    serialized_user = user_schema.dump(new_user)
+                    # Prepackage the response
+                    response = make_response(serialized_user, 201)
+                    # Set both cookies on the response - will be sent with every request until unset
+                    set_access_cookies(response, jwt)
+                    set_refresh_cookies(response, refresh_token)
+                    return response
+                except Exception as e:
+                    db.session.rollback()
+                    return {'error': str(e)}, 400
 
         except Exception as e:
             db.session.rollback()
-            db.session.commit()
             return {'error': str(e)}, 400

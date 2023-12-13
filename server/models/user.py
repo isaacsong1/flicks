@@ -9,7 +9,7 @@ class User(db.Model):
 
     # Columns for users Table
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, nullable=False, unique=True)
+    username = db.Column(db.String, nullable=False)
     _password_hash = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
     location = db.Column(db.String)

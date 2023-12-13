@@ -18,6 +18,7 @@ class Login(Resource):
             data = request.json
             # Query db by user email
             user = User.query.filter_by(email=data.get("email")).first()
+            
             # If user exists and authenticate
             if user and user.authenticate(data.get("password")):
                 jwt = create_access_token(identity=user.id)
@@ -31,8 +32,6 @@ class Login(Resource):
                 set_access_cookies(response, jwt)
                 set_refresh_cookies(response, refresh_token)
                 return response
-                # session['user_id'] = user.id
-                # return user_schema.dump(user), 200
             return {'error': 'Invalid Credentials'}, 403
         except Exception as e:
             return {'error': "Invalid Credentials"}, 403
