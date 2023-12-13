@@ -1,19 +1,17 @@
 import {useSelector} from 'react-redux';
 import CollectionCard from './CollectionCard';
 
-function CollectionContainer() {
+
+function CollectionContainer({movies, name, onClick}) {
     // const collections = useSelector(state => state.collection.data)
     const user = useSelector(state => state.user.data)
 
-    console.log(`User: ${user}`);
+    const moviesArray = movies
 
     return (
-        <div>
-            <h1>My Collections</h1>
-            <div>
-            {/* {collections && collections.map(collection => <CollectionCard key={collection.id} collection={collection} />)} */}
-            {/* {user.map(user.movie_collection.name => <CollectionCard key={collection.id} collection={collection} />)} */}
-            </div>
+        <div class='mediaContainer' onClick={onClick} style={{cursor: 'pointer'}}>
+            <h2>{name}</h2>
+            <p>Number of movies: {moviesArray.length}</p>
         </div>
     )
 }

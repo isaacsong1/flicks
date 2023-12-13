@@ -23,17 +23,19 @@ from routes.auth.logout import Logout
 from routes.auth.register import Register
 from routes.auth.refresh import Refresh
 from routes.auth.current_user import CurrentUser
-from routes.auth.check_token import CheckToken
+from routes.auth.google_auth import GoogleAuth
 #! General routes
 from routes.followers import Followers
 from routes.movie_by_id import MovieById
 from routes.movie_coll_by_id import MovieCollectionById
 from routes.movie_coll_by_name import MovieCollectionByName
+from routes.movie_coll_by_user import MovieCollectionByUser
 from routes.movie_collections import MovieCollections
 from routes.movies import Movies
 from routes.show_by_id import ShowById
 from routes.show_coll_by_id import ShowCollectionById
 from routes.show_coll_by_name import ShowCollectionByName
+from routes.show_coll_by_user import ShowCollectionByUser
 from routes.show_collections import ShowCollections
 from routes.shows import Shows
 from routes.user_by_id import UserById
@@ -47,17 +49,19 @@ api.add_resource(Logout, '/logout')
 api.add_resource(Register, '/register')
 api.add_resource(Refresh, '/refresh')
 api.add_resource(CurrentUser, '/currentuser')
-api.add_resource(CheckToken, '/check')
+api.add_resource(GoogleAuth, '/googleauth')
 #! General routes
 api.add_resource(Followers, '/followers')
 api.add_resource(MovieById, '/movies/<int:id>')
 api.add_resource(MovieCollectionById, '/movie_collections/<int:id>')
 api.add_resource(MovieCollectionByName, '/users/<int:id>/movie_collections/<string:name>')
+api.add_resource(MovieCollectionByUser, '/users/<int:id>/movie_collections')
 api.add_resource(MovieCollections, '/movie_collections')
 api.add_resource(Movies, '/movies')
 api.add_resource(ShowById, '/shows/<int:id>')
 api.add_resource(ShowCollectionById, '/show_collections/<int:id>')
 api.add_resource(ShowCollectionByName, '/users/<int:id>/show_collections/<string:name>')
+api.add_resource(ShowCollectionByUser, '/users/<int:id>/show_collections')
 api.add_resource(ShowCollections, '/show_collections')
 api.add_resource(Shows, '/shows')
 api.add_resource(UserById, '/users/<int:id>')

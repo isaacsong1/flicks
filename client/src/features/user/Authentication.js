@@ -1,22 +1,70 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import { useOutletContext } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { fetchRegister } from './userSlice';
-import { setToken, setRefreshToken } from '../../utils/main';
 // import * as snackbar from "snackbar";
 import "../../styles/authentication.css";
+import {jwtDecode} from 'jwt-decode';
 
 function Authentication() {
     const navigate = useNavigate();
     const [signUp, setSignUp] = useState(false);
     const user = useSelector(state => state.user.data);
+    const [userGoogle, setUserGoogle] = useState({});
     const dispatch = useDispatch();
   // const history = useHistory();
+    const googleAuthURL = "/googleauth";
+
+    const CLIENT_ID = process.env.REACT_APP_G_CLIENT_ID;
 
     const handleClick = () => setSignUp((signUp) => !signUp);
+
+    const handleCallbackResponse = (response) => {
+        console.log("Encoded JWT ID Token: " + response.credential);
+        const userObject = jwtDecode(response.credential);
+        console.log(userObject);
+        // setUserGoogle(userObject);
+        const action = dispatch(fetchRegister({url: googleAuthURL, values: {id_token: response.credential}}))
+        if (typeof action.payload !== 'string') {
+            // setToken(action.payload.jwt_token);
+            // setRefreshToken(action.payload.refresh_token);
+            // navigate(`/users/${user.name}/mycollection`);
+            navigate('/discover')
+            // dispatch(fetchAllMovies());
+        } else {
+            // show error (toast or snackbar)
+        }
+}
+
+    useEffect(() => {
+        /* global google */
+        window.google.accounts.id.initialize({
+            client_id: CLIENT_ID,
+            callback: handleCallbackResponse,
+        })
+
+        window.google.accounts.id.renderButton(
+            document.getElementById("signInDiv"),
+            { theme: "outline", size: "large" }
+        );
+
+        // const loadGoogleScript = () => {
+        //     return new Promise((resolve) => {
+        //         const script = document.createElement("script");
+        //         script.src = "https://apis.google.com/js/platform.js";
+        //         script.async = true;
+        //         script.defer = true;
+        //         script.onload = resolve;
+        //         document.head.appendChild(script);
+        //     });
+        // };
+
+    }, [])
+
+
 
     const signUpSchema = yup.object().shape({
         username: yup.string().required("Please enter a username"),
@@ -92,6 +140,8 @@ function Authentication() {
                     <input id='login' type='submit' value={signUp ? 'Sign Up' : 'Log In'} />
                 </form>
             </div>
+            <div id='signInDiv'></div>
+            
         </div>
     )
 }

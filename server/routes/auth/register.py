@@ -52,10 +52,6 @@ class Register(Resource):
             set_access_cookies(response, jwt)
             set_refresh_cookies(response, refresh_token)
             return response
-            # Add user id to cookies
-            # session['user_id'] = new_user.id
-            # serialized_user = user_schema.dump(new_user)
-            # return serialized_user, 201
         except Exception as e:
             # db.session.delete(new_user)
             db.session.rollback()
