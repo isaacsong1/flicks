@@ -1,7 +1,12 @@
-from . import request, Resource
+from . import request, Resource, make_response
 from models.user import User
 from schemas.user_schema import UserSchema
 from app_setup import db
+from flask_jwt_extended import (
+    unset_access_cookies,
+    unset_refresh_cookies,
+)
+
 
 user_schema = UserSchema(session=db.session)
 
@@ -36,6 +41,9 @@ class UserById(Resource):
             try:
                 db.session.delete(user)
                 db.session.commit()
+                response = make_response({}, 204)
+                unset_access_cookies(response)
+                unset_refresh_cookies(response)
                 return {'message': f'User {id} has been deleted'}, 200
             except Exception as e:
                 db.session.rollback()

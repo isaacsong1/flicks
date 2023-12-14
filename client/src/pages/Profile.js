@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useOutletContext, useParams  } from 'react-router-dom';
-import { fetchPatchUser } from '../features/user/userSlice';
+import { useOutletContext, useParams, useNavigate  } from 'react-router-dom';
+import { fetchPatchUser, fetchDeleteUser } from '../features/user/userSlice';
 import { clearErrors as clearUserErrors} from '../features/user/userSlice';
-import { useFormik } from "formik"
+import { useFormik, Form } from "formik"
 import * as yup from "yup"
 
 const Profile = () => {
@@ -19,6 +19,8 @@ const Profile = () => {
     const { id } = useParams();
     const [followerList, setFollowerList] = useState(false);
     const [followingList, setFollowingList] = useState(false);
+    const [confirmDelete, setConfirmDelete] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (errors.length) {
@@ -61,6 +63,10 @@ const Profile = () => {
         },
         validationSchema: profileSchema,
         onSubmit: async (values) => {
+            // before patch
+            // await dispatch(checkToken())
+            // if failed, dispatch(refreshToken())
+            // if success, fire dispatch below
             const action = await dispatch(fetchPatchUser({url, values}))
             if (typeof action.payload !== 'string') {
                 // resp.json().then(updateUser)
@@ -75,6 +81,19 @@ const Profile = () => {
             }
         }
     })
+    
+
+
+    const handleConfirmDelete = (boolean) => {
+        setConfirmDelete(boolean);
+    }
+
+    const handleDelete = () => {
+        dispatch(fetchDeleteUser(`/users/${user.id}`));
+        handleNewAlert("Profile has been deleted");
+        handleAlertType("success");
+        navigate('/');
+    }
 
     return (
         <div>
@@ -82,25 +101,36 @@ const Profile = () => {
             {/* <button onClick={handleEditMode} >Edit Profile</button> */}
             <div className="profile-container" >
             {editMode ? (
-                <form className="profile-info" onSubmit={formik.handleSubmit}>
-                    <div class='inputs'>
-                        <label htmlFor='username'>Username: </label>
-                        <input type='text' name='username' value={formik.values.username} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                        {formik.errors.username && formik.touched.username ? <div className="error-message show">{formik.errors.username}</div> : null}
-                    </div>
-                    <div class='inputs'>
-                        <label htmlFor='location'>Location: </label>
-                        <input type='text' name='location' value={formik.values.location} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                        {formik.errors.location && formik.touched.location ? <div className="error-message show">{formik.errors.location}</div> : null}
-                    </div>
-                    <div class='inputs'>
-                        <label htmlFor='bio'>Bio: </label>
-                        <input type='text' name='bio' value={formik.values.bio} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                        {formik.errors.bio && formik.touched.bio ? <div className="error-message show">{formik.errors.bio}</div> : null}
-                    </div>
-                    <input className='edit-save-btn' type='submit' value={'Save Profile'} onClick={setEditMode} />
-                </form>
-                ) : (
+                <div>
+                    <form className="profile-info" onSubmit={formik.handleSubmit}>
+                        <div class='inputs'>
+                            <label htmlFor='username'>Username: </label>
+                            <input type='text' name='username' value={formik.values.username} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            {formik.errors.username && formik.touched.username ? <div className="error-message show">{formik.errors.username}</div> : null}
+                        </div>
+                        <div class='inputs'>
+                            <label htmlFor='location'>Location: </label>
+                            <input type='text' name='location' value={formik.values.location} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            {formik.errors.location && formik.touched.location ? <div className="error-message show">{formik.errors.location}</div> : null}
+                        </div>
+                        <div class='inputs'>
+                            <label htmlFor='bio'>Bio: </label>
+                            <input type='text' name='bio' value={formik.values.bio} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            {formik.errors.bio && formik.touched.bio ? <div className="error-message show">{formik.errors.bio}</div> : null}
+                        </div>
+                        <input className='edit-save-btn' type='submit' value={'Save Profile'} onClick={setEditMode} />
+                    </form>
+                    {confirmDelete ? (
+                        <div>
+                            {'Are you sure? '}
+                            <button onClick={handleDelete}>Yes</button>
+                            <button onClick={() => handleConfirmDelete(false)}>No</button>
+                        </div>
+                    ) : (
+                        <button onClick={() => handleConfirmDelete(true)}>Delete Account</button>
+                    )}
+                </div>
+                    ) : (
                 <div className="profile-info">
                     {followerList ? (
                         <div>

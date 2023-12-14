@@ -86,6 +86,10 @@ const patchUser = async ({url, values}) => {
     }
 }
 
+const deleteUser = async (url) => {
+    fetch(url, {method: 'DELETE'})
+}
+
 const userSlice = createSlice({
     name: 'user',
     initialState,
@@ -169,6 +173,27 @@ const userSlice = createSlice({
                 }
             }
         ),
+        fetchDeleteUser: create.asyncThunk(
+            deleteUser,
+            {
+                pending: (state) => {
+                    state.loading = true;
+                    state.errors = [];
+                },
+                rejected: (state, action) => {
+                    state.loading = false;
+                    state.errors.push(action.payload);
+                },
+                fulfilled: (state, action) => {
+                    state.loading = false;
+                    if (typeof action.payload === 'string') {
+                        state.errors.push(action.payload);
+                    } else {
+                        state.data = null;
+                    }
+                }
+            }
+        ),
     }),
     selectors: {
         selectUser(state) {
@@ -180,6 +205,6 @@ const userSlice = createSlice({
     }
 });
 
-export const {setUser, logout, addError, clearErrors, fetchCurrentUser, fetchRegister, fetchPatchUser} = userSlice.actions
+export const {setUser, logout, addError, clearErrors, fetchCurrentUser, fetchRegister, fetchPatchUser, fetchDeleteUser} = userSlice.actions
 export const {selectUser, selectErrors} = userSlice.selectors
 export default userSlice.reducer

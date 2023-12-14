@@ -26,6 +26,7 @@ from routes.auth.current_user import CurrentUser
 from routes.auth.google_auth import GoogleAuth
 #! General routes
 from routes.followers import Followers
+from routes.follower_by_id import FollowerById
 from routes.movie_by_id import MovieById
 from routes.movie_coll_by_id import MovieCollectionById
 from routes.movie_coll_by_name import MovieCollectionByName
@@ -52,6 +53,7 @@ api.add_resource(CurrentUser, '/currentuser')
 api.add_resource(GoogleAuth, '/googleauth')
 #! General routes
 api.add_resource(Followers, '/followers')
+api.add_resource(FollowerById, '/user/<int:user_id>/following/<int:following_id>')
 api.add_resource(MovieById, '/movies/<int:id>')
 api.add_resource(MovieCollectionById, '/movie_collections/<int:id>')
 api.add_resource(MovieCollectionByName, '/users/<int:id>/movie_collections/<string:name>')

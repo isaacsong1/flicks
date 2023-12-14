@@ -48,12 +48,12 @@ function App() {
             console.log(action.payload);
           } else {
             setDiscoverPage(true);
-            navigate(`/users/${action.payload.user.id}/mycollection`);
+            navigate(`/users/${action.payload.user.id}/profile`);
           }
         }
       } else {
         setDiscoverPage(true);
-        navigate(`/users/${user.id}/mycollection`);
+        navigate(`/users/${user.id}/profile`);
       }
     })()
   }, [user, dispatch, navigate]);

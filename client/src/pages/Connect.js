@@ -6,7 +6,7 @@ const Connect = () => {
     const user = useSelector(state => state.user.data);
     const dispatch = useDispatch();
     const [allUsers, setAllUsers] = useState([])
-    const [myFollowers, setMyFollowers] = useState([])
+    const [myFollowing, setMyFollowing] = useState([])
 
     useEffect(() => {
         fetch('/users')
@@ -18,18 +18,21 @@ const Connect = () => {
                 console.log('fetch all users error')
             }
         })
-    }, [])
+    }, [user])
 
-    const handleUnfollow = () => {
-
+    const handleUnfollow = (userToUnfollowId) => {
+        fetch(`/user/${user.id}/following/${userToUnfollowId}`, {method: "DELETE"})
     }
 
     const handleFollow = () => {
 
     }
     
-    const followerArray = []
-    user.followers.forEach(follower => followerArray.push(follower['follower.username']))
+    // const followerArray = []
+    useEffect(() => {
+        user.followings.forEach(following => setMyFollowing(myFollower => [...myFollower, following['follower.username']]))
+    }, [user])
+    // debugger;
 
     const filteredUsers = allUsers.filter(individualUser => individualUser.id !== user.id)
 
@@ -38,8 +41,8 @@ const Connect = () => {
             <h3>{individualUser.username}</h3>
             <p>Followers: {individualUser.followers.length}</p>
             <p>Following: {individualUser.followings.length}</p>
-            {followerArray.includes(individualUser.username) ? (
-                <button onClick={handleUnfollow} >Unfollow</button>
+            {myFollowing.includes(individualUser.username) ? (
+                <button onClick={() => handleUnfollow (individualUser.id)} >Unfollow</button>
                 ) : (
                 <button onClick={handleFollow} >Follow</button>
             )}
