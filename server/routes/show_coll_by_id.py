@@ -18,7 +18,6 @@ class ShowCollectionById(Resource):
                 # Get user input data
                 data = request.json
                 # Validate show collection information
-                import ipdb; ipdb.set_trace()
                 show_collection_schema.validate(data)
                 # Deserialize data and allow for partial updates
                 updated_show_collection = show_collection_schema.load(

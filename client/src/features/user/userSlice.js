@@ -180,6 +180,6 @@ const userSlice = createSlice({
     }
 });
 
-export const {setUser, logout, addError, clearErrors, fetchCurrentUser, fetchRegister} = userSlice.actions
+export const {setUser, logout, addError, clearErrors, fetchCurrentUser, fetchRegister, fetchPatchUser} = userSlice.actions
 export const {selectUser, selectErrors} = userSlice.selectors
 export default userSlice.reducer

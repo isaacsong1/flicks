@@ -9,7 +9,7 @@ import { fetchRegister } from './userSlice';
 import "../../styles/authentication.css";
 import {jwtDecode} from 'jwt-decode';
 
-function Authentication() {
+function Authentication({handleNewAlert, handleAlertType}) {
     const navigate = useNavigate();
     const [signUp, setSignUp] = useState(false);
     const user = useSelector(state => state.user.data);
@@ -111,10 +111,13 @@ function Authentication() {
             if (typeof action.payload !== 'string') {
                 // setToken(action.payload.jwt_token);
                 // setRefreshToken(action.payload.refresh_token);
+                handleNewAlert("Welcome!");
+                handleAlertType("success");
                 navigate(`/users/${user.id}/mycollection`);
                 // dispatch(fetchAllMovies());
             } else {
-                // show error (toast or snackbar)
+                handleNewAlert(action.payload);
+                handleAlertType("error");
             }
         }
     });

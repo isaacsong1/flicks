@@ -14,8 +14,11 @@ const Profile = () => {
     const clearErrorsAction = useCallback(() => {
         dispatch(clearUserErrors(''));
     }, [dispatch]);
+    const {handleNewAlert, handleAlertType} = useOutletContext();
     const [editMode, setEditMode] = useState(false);
     const { id } = useParams();
+    const [followerList, setFollowerList] = useState(false);
+    const [followingList, setFollowingList] = useState(false);
 
     useEffect(() => {
         if (errors.length) {
@@ -23,8 +26,17 @@ const Profile = () => {
             }
     }, [errors, clearErrorsAction]);
 
+
     const handleEditMode = () => {
         setEditMode(!editMode);
+    }
+
+    const handleFollowerList = (boolean) => {
+        setFollowerList(boolean);
+    }
+
+    const handleFollowingList = (boolean) => {
+        setFollowingList(boolean);
     }
 
     const profileSchema = yup.object().shape({
@@ -53,9 +65,13 @@ const Profile = () => {
             if (typeof action.payload !== 'string') {
                 // resp.json().then(updateUser)
                 console.log('response was ok from user patch');
+                handleNewAlert("Profile updated!");
+                handleAlertType("success");
             } else {
                 // resp.json().then(errorObj => handleNewAlert(errorObj.error))
                 console.log('response was not ok from user patch');
+                handleNewAlert("Profile could not be updated");
+                handleAlertType("error");
             }
         }
     })
@@ -65,7 +81,7 @@ const Profile = () => {
             <h1>{`${user.username}'s Profile`}</h1>
             {/* <button onClick={handleEditMode} >Edit Profile</button> */}
             <div className="profile-container" >
-            {editMode ?
+            {editMode ? (
                 <form className="profile-info" onSubmit={formik.handleSubmit}>
                     <div class='inputs'>
                         <label htmlFor='username'>Username: </label>
@@ -84,21 +100,41 @@ const Profile = () => {
                     </div>
                     <input className='edit-save-btn' type='submit' value={'Save Profile'} onClick={setEditMode} />
                 </form>
-            :
+                ) : (
                 <div className="profile-info">
-                <div className="info-icon">
-                    <div>
-                        <p><b>Username:</b> {user.username}</p>
-                        <p><b>Email:</b> {user.email}</p>
-                        <p><b>Location:</b> {user.location}</p>
-                        <p><b>Bio:</b> {user.bio}</p>
+                    {followerList ? (
+                        <div>
+                            <button onClick={() => handleFollowerList(false)} >X</button>
+                            {user.followers.map(follower => (<h3>{follower['follower.username']}</h3>))}
+                        </div>
+                    ) : (
+                        <div onClick={() => handleFollowerList(true)} >
+                            Followers: {user.followers.length}
+                        </div>
+                    )}
+                    {followingList ? (
+                        <div>
+                            <button onClick={() => handleFollowingList(false)} >X</button>
+                            {user.followings.map(following => (<h3>{following['following.username']}</h3>))}
+                        </div>
+                    ) : (
+                        <div onClick={() => handleFollowingList(true)} >
+                            Following: {user.followings.length}
+                        </div>
+                    )}
+                    <div className="info-icon">
+                        <div>
+                            <p><b>Username:</b> {user.username}</p>
+                            <p><b>Email:</b> {user.email}</p>
+                            <p><b>Location:</b> {user.location}</p>
+                            <p><b>Bio:</b> {user.bio}</p>
+                        </div>
+                    </div>
+                    <div className="profile-button">
+                        {user.id === parseInt(id) ? (editMode ? null :  <button className='edit-save-btn' onClick={handleEditMode} >Edit Profile</button>) : null}
                     </div>
                 </div>
-                <div className="profile-button">
-                    {user.id === parseInt(id) ? (editMode ? null :  <button className='edit-save-btn' onClick={handleEditMode} >Edit Profile</button>) : null}
-                </div>
-                </div>
-            }
+            )}
         </div>
         
         

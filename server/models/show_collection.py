@@ -32,12 +32,12 @@ class ShowCollection(db.Model):
         else:
             raise ValueError('User ID must be from a valid user')
     
-    @validates('show_id')
-    def validate_showid(self, _, value):
-        if value and db.session.get(Show, value):
-            return value
-        else:
-            raise ValueError('Show ID must be from a valid show')
+    # @validates('show_id')
+    # def validate_showid(self, _, value):
+    #     if value and db.session.get(Show, value):
+    #         return value
+    #     else:
+    #         raise ValueError('Show ID must be from a valid show')
 
     # repr
     def __repr__(self):

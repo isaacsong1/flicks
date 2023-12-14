@@ -5,9 +5,9 @@ import MediaCard from '../components/MediaCard';
 
 const Discover = () => {
     const user = useSelector(state => state.user.data);
-    const { movieMode, setMovieMode, discoverPage, setDiscoverPage, movieCollectionNames, showCollectionNames, movies, setMovies, shows, movieCollectionByName, showCollectionByName } = useOutletContext();
-    const [movie, setMovie] = useState({});
-    const [show, setShow] = useState({});
+    const { handleNewAlert, handleAlertType, movieMode, setMovieMode, discoverPage, setDiscoverPage, movieCollectionNames, showCollectionNames, movies, setMovies, shows, movieCollectionByName, showCollectionByName } = useOutletContext();
+    const [fetchedMovie, setFetchedMovie] = useState({});
+    const [fetchedShow, setFetchedShow] = useState({});
     const [mediaInt, setMediaInt] = useState(Math.floor(Math.random() * 100) + 1);
     const [selectedCollection, setSelectedCollection] = useState('default');
     setDiscoverPage(true);
@@ -17,7 +17,7 @@ const Discover = () => {
             try {
                 const resp = await fetch(`/movies/${mediaInt}`);
                 const data = await resp.json();
-                setMovie(data);
+                setFetchedMovie(data);
             } catch (error) {
                 console.log(`Error fetching movie: ${error}`)
             }
@@ -26,7 +26,7 @@ const Discover = () => {
             try {
                 const resp = await fetch(`/shows/${mediaInt}`);
                 const data = await resp.json();
-                setShow(data);
+                setFetchedShow(data);
             } catch (error) {
                 console.log(`Error fetching shows: ${error}`)
             }
@@ -56,15 +56,14 @@ const Discover = () => {
 
     const handleAddToCollection = () => {
         if (selectedCollection !== 'default') {
-            console.log('Selected collection', selectedCollection);
             if (movieMode) {
                 let movieCollToPatch = null;
                 let movieToPatch = null;
                 for (const movieEl of movieCollectionByName[selectedCollection]) {
                     if ((movieEl.movie_id === null) && (movieEl.name === selectedCollection)) {
-                        movieCollToPatch = movie.id;
-                        movieToPatch = movie;
-                    } else if (movieEl.movie_id === movie.id) {
+                        movieCollToPatch = fetchedMovie.id;
+                        movieToPatch = movieEl;
+                    } else if (movieEl.movie_id === fetchedMovie.id) {
                         movieCollToPatch = 0;
                     }
                 }
@@ -74,7 +73,7 @@ const Discover = () => {
                             const newMovieCollObj = {
                                 name: selectedCollection,
                                 user_id: user.id,
-                                movie_id: movie.id
+                                movie_id: fetchedMovie.id
                             }
                             fetch('/movie_collections', {
                                 method: 'POST',
@@ -82,9 +81,19 @@ const Discover = () => {
                                     'Content-Type': 'application/json'
                                 },
                                 body: JSON.stringify(newMovieCollObj)
-                            });
+                            })
+                            .then(resp => {
+                                if (resp.ok) {
+                                    handleNewAlert("Movie was added successfully!");
+                                    handleAlertType("success");
+                                } else {
+                                    handleNewAlert("Movie could not be added");
+                                    handleAlertType("error");
+                                }
+                            })
                         } catch (error) {
-                            console.log(`Error fetching movies: ${error}`);
+                            handleNewAlert("Movie could not be added");
+                            handleAlertType("error");
                         }
                     }
                     postMovieCollById();
@@ -92,30 +101,35 @@ const Discover = () => {
                     const patchMovieCollById = async () => {
                         try {
                             movieToPatch.movie_id = movieCollToPatch;
-                            movieToPatch.movie = movie
-                            const resp = await fetch(`/movie_collections/${movieCollToPatch}`, {
+                            movieToPatch.movie = fetchedMovie
+                            fetch(`/movie_collections/${movieToPatch.id}`, {
                                 method: 'PATCH',
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
                                 body: JSON.stringify({...movieToPatch})
                             });
+                            handleNewAlert("Movie was added successfully!");
+                            handleAlertType("success");
                         } catch (error) {
                             console.log(`Error fetching movies: ${error}`);
                         }
                     }
                     patchMovieCollById();
+                    // debugger;
                 } else {
-                    console.log('That movie is already in the collection')
+                    handleNewAlert("Movie is already in collection");
+                    handleAlertType("error");
                 }
             } else {
                 let showCollToPatch = null;
                 let showToPatch = null;
+
                 for (const showEl of showCollectionByName[selectedCollection]) {
                     if ((showEl.show_id === null) && (showEl.name === selectedCollection)) {
-                        showCollToPatch = show.id;
-                        showToPatch = show;
-                    } else if (showEl.show_id === show.id) {
+                        showCollToPatch = fetchedShow.id;
+                        showToPatch = showEl;
+                    } else if (showEl.show_id === fetchedShow.id) {
                         showCollToPatch = 0;
                     }
                 }
@@ -125,7 +139,7 @@ const Discover = () => {
                             const newShowCollObj = {
                                 name: selectedCollection,
                                 user_id: user.id,
-                                show_id: show.id
+                                show_id: fetchedShow.id
                             }
                             fetch('/show_collections', {
                                 method: 'POST',
@@ -134,6 +148,8 @@ const Discover = () => {
                                 },
                                 body: JSON.stringify(newShowCollObj)
                             });
+                            handleNewAlert("Show was added successfully");
+                            handleAlertType("success");
                         } catch (error) {
                             console.log(`Error fetching shows: ${error}`);
                         }
@@ -143,21 +159,24 @@ const Discover = () => {
                     const patchShowCollById = async () => {
                         try {
                             showToPatch.show_id = showCollToPatch;
-                            showToPatch.show = show
-                            const resp = await fetch(`/show_collections/${showCollToPatch}`, {
+                            showToPatch.show = fetchedShow
+                            fetch(`/show_collections/${showToPatch.id}`, {
                                 method: 'PATCH',
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
                                 body: JSON.stringify({...showToPatch})
                             });
+                            handleNewAlert("Show was added successfully");
+                            handleAlertType("success");
                         } catch (error) {
                             console.log(`Error fetching shows: ${error}`);
                         }
                     }
                     patchShowCollById();
                 } else {
-                    console.log('That show is already in the collection')
+                    handleNewAlert("Show is already in your collection");
+                    handleAlertType("error");
                 }
             }
         }
@@ -180,11 +199,11 @@ const Discover = () => {
             {movieMode ? (
                 <div>
                     <MediaCard 
-                        id={movie.id} 
-                        title={movie.title} 
-                        image={movie.image} 
-                        rating={movie.rating} 
-                        description={movie.description}
+                        id={fetchedMovie.id} 
+                        title={fetchedMovie.title} 
+                        image={fetchedMovie.image} 
+                        rating={fetchedMovie.rating} 
+                        description={fetchedMovie.description}
                         discoverPage={discoverPage}
                     />
                     <button onClick={handleNewMedia}>Generate New Movie</button>
@@ -197,11 +216,11 @@ const Discover = () => {
             ) : (
                 <div>
                     <MediaCard 
-                        id={show.id} 
-                        title={show.title} 
-                        image={show.image} 
-                        rating={show.rating} 
-                        description={show.description}
+                        id={fetchedShow.id} 
+                        title={fetchedShow.title} 
+                        image={fetchedShow.image} 
+                        rating={fetchedShow.rating} 
+                        description={fetchedShow.description}
                         discoverPage={discoverPage}
                     />
                     <button onClick={handleNewMedia}>Generate New Show</button>

@@ -14,7 +14,7 @@ const MyCollection = () => {
     const [form, setForm] = useState(false);
     const [formData, setFormData] = useState(initialValue);
     const [deleteMode, setDeleteMode] = useState(false);
-    const { discoverPage, movieMode, setMovieMode, movies, setMovies, movieCollectionNames, setMovieCollectionNames, showCollectionNames, setShowCollectionNames, shows, setShows, movieCollectionByName, setMovieCollectionByName, showCollectionByName, setShowCollectionByName } = useOutletContext();
+    const { handleNewAlert, handleAlertType, discoverPage, movieMode, setMovieMode, movies, setMovies, movieCollectionNames, setMovieCollectionNames, showCollectionNames, setShowCollectionNames, shows, setShows, movieCollectionByName, setMovieCollectionByName, showCollectionByName, setShowCollectionByName } = useOutletContext();
     
     useEffect(() => {
         const fetchMovies = async () => {
@@ -93,6 +93,8 @@ const MyCollection = () => {
             .then(() => {
                 setSelectedCollection(updatedMovieCollectionByName);
                 setMovies(updatedMovies);
+                handleNewAlert("Movie was removed from your collection");
+                handleAlertType("success");
             })
         } else {
             const updatedShowCollectionByName = selectedCollection.filter((show) => show.id !== collection_id);
@@ -101,6 +103,8 @@ const MyCollection = () => {
             .then(() => {
                 setSelectedCollection(updatedShowCollectionByName);
                 setShows(updatedShows);
+                handleNewAlert("Show was removed from your collection");
+                handleAlertType("success");
             })
         }
     }
@@ -131,11 +135,14 @@ const MyCollection = () => {
                         setFormData('');
                         setForm(false);
                         setMovies(movies => [...movies, data])
+                        handleNewAlert("New collection has been added");
+                        handleAlertType("success");
                     })
                 }
             })
             .catch(error => {
-                console.log(error)
+                handleNewAlert("Could not create new collection");
+                handleAlertType("error");
             })
         } else if ((!movieMode) && (showCollectionNames.includes(formData.name) === false)) {
             fetch('/show_collections', {
@@ -152,15 +159,19 @@ const MyCollection = () => {
                         setFormData('');
                         setForm(false);
                         setShows(shows => [...shows, data])
+                        handleNewAlert("New collection has been added");
+                        handleAlertType("success");
                     })
                 }
             })
             .catch(error => {
-                console.log(error)
+                handleNewAlert("Could not create new collection");
+                handleAlertType("error");
             })
         } else {
             setFormData(formData => formData.name = '');
-            console.log('Collection name exists already')
+            handleNewAlert("A collection with that name already exists!");
+            handleAlertType("error");
         } 
     }
 
@@ -170,12 +181,16 @@ const MyCollection = () => {
             fetch(`/users/${user.id}/movie_collections/${collection_name}`, {method: 'DELETE'})
             .then(() => {
                 setMovies(updatedMovies);
+                handleNewAlert("Movie collection has been deleted");
+                handleAlertType("success");
             })
         } else {
             const updatedShows = shows.filter((show) => show.name !== collection_name);
             fetch(`/users/${user.id}/show_collections/${collection_name}`, {method: 'DELETE'})
             .then(() => {
                 setShows(updatedShows);
+                handleNewAlert("Show collection has been deleted");
+                handleAlertType("success")
             })
         }
     }
