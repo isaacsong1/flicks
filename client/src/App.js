@@ -8,31 +8,26 @@ import AllMedia from './pages/AllMedia';
 import Navigation from './components/Navigation';
 // import MyCollection from './pages/MyCollection';
 
-// Ideas for non-logged in user:
-// View all movies and shows that are in the database (no fetch calls)
-// Be able to generate random movie/show title to see if they wanna watch it
-// No profile page
-// No collection page
-// No connect page
-
-// For logged in user:
-// View all movies and shows that are in the database (no fetch calls) with option to add to collection
-// Be able to generate random movie/show title to see if they wanna watch it with option to add to collection
-// Profile page, shows user information
-// Collection page, shows collections with option to click into one and edit
-// Connect page with option to follow
-
 function App() {
   const user = useSelector(state => state.user.data);
   const userErrors = useSelector(state => state.user.errors);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const errors = [...userErrors];
   const errors = useMemo(() => userErrors, [userErrors]);
   const clearErrorsAction = useCallback(() => {
     dispatch(clearUserErrors(''));
   }, [dispatch]);
+  // MyCollection States
+  const [movieMode, setMovieMode] = useState(true);
+  const [movies, setMovies] = useState([]);
+  const [movieCollectionNames, setMovieCollectionNames] = useState([]);
+  const [showCollectionNames, setShowCollectionNames] = useState([]);
+  const [shows, setShows] = useState([]);
+  const [movieCollectionByName, setMovieCollectionByName] = useState({});
+  const [showCollectionByName, setShowCollectionByName] = useState({});
+  const [discoverPage, setDiscoverPage] = useState(false);
 
+  // MyCollection Helpers
   useEffect(() => {
     (async () => {
       if (!user) {
@@ -42,11 +37,13 @@ function App() {
             // setToken(action.payload.jwt_token);
             console.log(action.payload);
           } else {
-            navigate('/discover');
+            setDiscoverPage(true);
+            navigate(`/users/${user.id}/mycollection`);
           }
         }
       } else {
-        navigate('/discover');
+        setDiscoverPage(true);
+        navigate(`/users/${user.id}/mycollection`);
       }
     })()
   }, [user, dispatch, navigate]);
@@ -56,6 +53,9 @@ function App() {
       clearErrorsAction()
     }
   }, [errors, clearErrorsAction]);
+
+  
+  const ctx = { discoverPage, setDiscoverPage, movieMode, setMovieMode, movies, setMovies, movieCollectionNames, setMovieCollectionNames, showCollectionNames, setShowCollectionNames, shows, setShows, movieCollectionByName, setMovieCollectionByName, showCollectionByName, setShowCollectionByName }
   
   if (!user) return (
     <div id='welcome'>
@@ -65,8 +65,8 @@ function App() {
   )
   return (
     <div id='app'>
-      <Navigation />
-      <Outlet />
+      <Navigation setDiscoverPage={setDiscoverPage} />
+      <Outlet context={ctx} />
       {/* <MyCollection /> */}
     </div>
   )

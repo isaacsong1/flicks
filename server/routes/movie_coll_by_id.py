@@ -17,6 +17,7 @@ class MovieCollectionById(Resource):
             try:
                 # Get user input data
                 data = request.json
+                # import ipdb; ipdb.set_trace();
                 # Validate movie collection information
                 movie_collection_schema.validate(data)
                 # Deserialize data and allow for partial updates

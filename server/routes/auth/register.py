@@ -34,12 +34,6 @@ class Register(Resource):
             new_user.password_hash = request.json.get('password')
             db.session.add(new_user)
             db.session.commit()
-            # Create 'main' collection for movies and shows
-            # if new_user.id:
-            #     main_mc = MovieCollection(name='main', user_id=new_user.id)
-            #     main_sc = ShowCollection(name='main', user_id=new_user.id)
-            #     db.session.add_all([main_mc, main_sc])
-            # db.session.commit()
             # Start JWT
             jwt = create_access_token(identity=new_user.id)
             # Manually set refresh token

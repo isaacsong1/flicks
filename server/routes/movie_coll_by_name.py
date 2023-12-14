@@ -31,10 +31,11 @@ class MovieCollectionByName(Resource):
                 return {'error': f'MovieCollByName Patch error, {str(e)}'}, 400
         return {'error': 'Could not find movie collection with that name'}, 404
 
-    def delete(self, name):
+    def delete(self, id, name):
         if movie_collection := MovieCollection.query.filter(and_(MovieCollection.user_id == id, MovieCollection.name == name)):
             try:
-                db.session.delete(movie_collection)
+                for movie in movie_collection:
+                    db.session.delete(movie)
                 db.session.commit()
                 return {'message': f'Movie collection {name} has been deleted'}, 200
             except Exception as e:

@@ -26,6 +26,5 @@ class MovieCollections(Resource):
             serialized_movie_collection = movie_collection_schema.dump(new_movie_collection)
             return serialized_movie_collection, 201
         except Exception as e:
-            db.session.delete(new_movie_collection)
-            db.session.commit()
+            db.session.rollback()
             return {'error': f'MovieColls post error, {str(e)}'}, 400

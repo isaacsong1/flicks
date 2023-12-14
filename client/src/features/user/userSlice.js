@@ -66,31 +66,25 @@ const fetchMe = async () => {
     }
 }
 
-// const GinitialState = {
-//     isSignedIn: null,
-//     user: null
-// };
-
-// const handleGoogleResponse = async (response ) => {
-//     try {
-//         const resp = await fetch('/googleauth', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'Accept': 'application/json'
-//             },
-//             body: JSON.stringify({id_token: response.credential})
-//         });
-//         const data = await resp.json()
-//         if (resp.ok) {
-//             return data;
-//         } else {
-//             throw data.message || data.msg;
-//         }
-//     } catch (error) {
-//         return error;
-//     }
-// }
+const patchUser = async ({url, values}) => {
+    try {
+        const resp = await fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(values)
+        })
+        const data = await resp.json()
+        if (resp.ok) {
+            return data;
+        } else {
+            throw data.message || data.msg;
+        }
+    } catch (error) {
+        return error;
+    }
+}
 
 const userSlice = createSlice({
     name: 'user',
@@ -154,28 +148,27 @@ const userSlice = createSlice({
                 }
             }
         ),
-        // fetchGoogleUser: create.asyncThunk(
-        //     handleGoogleResponse,
-        //     {
-        //         pending: (state) => {
-        //             state.loading = true;
-        //             state.errors = [];
-        //         },
-        //         rejected: (state, action) => {
-        //             state.loading = false;
-        //             state.errors.push(action.payload);
-        //         },
-        //         fulfilled: (state, action) => {
-        //             state.loading = false;
-        //             if (typeof action.payload === 'string') {
-        //                 state.errors.push(action.payload);
-        //             } else {
-        //                 state.data = action.payload.user;
-        //             }
-        //         }
-        //     }
-        // ),
-            
+        fetchPatchUser: create.asyncThunk(
+            patchUser,
+            {
+                pending: (state) => {
+                    state.loading = true;
+                    state.errors = [];
+                },
+                rejected: (state, action) => {
+                    state.loading = false;
+                    state.errors.push(action.payload);
+                },
+                fulfilled: (state, action) => {
+                    state.loading = false;
+                    if (typeof action.payload === 'string') {
+                        state.errors.push(action.payload);
+                    } else {
+                        state.data = action.payload.user;
+                    }
+                }
+            }
+        ),
     }),
     selectors: {
         selectUser(state) {

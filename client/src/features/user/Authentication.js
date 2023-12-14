@@ -18,13 +18,11 @@ function Authentication() {
   // const history = useHistory();
     const googleAuthURL = "/googleauth";
 
-    console.log(user)
-
     const CLIENT_ID = process.env.REACT_APP_G_CLIENT_ID;
 
     const handleClick = () => setSignUp((signUp) => !signUp);
 
-    const handleCallbackResponse = (response) => {
+    const handleCallbackResponse = async (response) => {
         console.log("Encoded JWT ID Token: " + response.credential);
         const userObjectG = jwtDecode(response.credential);
         console.log(userObjectG);
@@ -34,7 +32,7 @@ function Authentication() {
         }
 
         // setUserGoogle(userObject);
-        const action = dispatch(fetchRegister({url: googleAuthURL, values: {...userObject, id_token: response.credential}}))
+        const action = await dispatch(fetchRegister({url: googleAuthURL, values: {...userObject, id_token: response.credential}}))
         if (typeof action.payload !== 'string') {
             // setToken(action.payload.jwt_token);
             // setRefreshToken(action.payload.refresh_token);
@@ -103,9 +101,9 @@ function Authentication() {
 
     const formik = useFormik({
         initialValues: {
-        username: "",
-        email: "",
-        password: "",
+            username: "",
+            email: "",
+            password: "",
         },
         validationSchema: signUp ? signUpSchema : logInSchema,
         onSubmit: async (values) => {

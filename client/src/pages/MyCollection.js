@@ -1,21 +1,21 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, forceUpdate } from 'react';
 import {useSelector} from 'react-redux';
+import { useOutletContext } from "react-router-dom";
 import CollectionContainer from '../features/collection/CollectionContainer';
 import MediaCard from '../components/MediaCard';
 
+const initialValue = {
+    name: ""
+};
+
 const MyCollection = () => {
     const user = useSelector(state => state.user.data);
-    const [movieMode, setMovieMode] = useState(true);
-    const [movies, setMovies] = useState([]);
-    const [shows, setShows] = useState([]);
-    const [movieCollectionByName, setMovieCollectionByName] = useState({});
-    const [showCollectionByName, setShowCollectionByName] = useState({});
     const [selectedCollection, setSelectedCollection] = useState(null);
-
-    const handleClick = (boolean) => {
-        setMovieMode(boolean);
-    };
-
+    const [form, setForm] = useState(false);
+    const [formData, setFormData] = useState(initialValue);
+    const [deleteMode, setDeleteMode] = useState(false);
+    const { discoverPage, movieMode, setMovieMode, movies, setMovies, movieCollectionNames, setMovieCollectionNames, showCollectionNames, setShowCollectionNames, shows, setShows, movieCollectionByName, setMovieCollectionByName, showCollectionByName, setShowCollectionByName } = useOutletContext();
+    
     useEffect(() => {
         const fetchMovies = async () => {
             try {
@@ -43,7 +43,6 @@ const MyCollection = () => {
         const collectionByNameM = {};
         // Creates an array of arrays for each unique collection name for movies
         movies.forEach((movie) => {
-            // console.log(movie)
             const { name } = movie;
             if (!collectionByNameM[name]) {
                 collectionByNameM[name] = [];
@@ -53,7 +52,6 @@ const MyCollection = () => {
         const collectionByNameS = {};
         // Creates an array of arrays for each unique collection name for shows
         shows.forEach((show) => {
-            // console.log(movie)
             const { name } = show;
             if (!collectionByNameS[name]) {
                 collectionByNameS[name] = [];
@@ -62,13 +60,24 @@ const MyCollection = () => {
         });
         setMovieCollectionByName(collectionByNameM);
         setShowCollectionByName(collectionByNameS);
+        setMovieCollectionNames(Object.keys(collectionByNameM));
+        setShowCollectionNames(Object.keys(collectionByNameS));
     }, [movies, shows])
+
+    const handleClick = (boolean) => {
+        setMovieMode(boolean);
+        setDeleteMode(false);
+    };
+
+    const handleDeleteMode = () => {
+        setDeleteMode(deleteMode => !deleteMode);
+    }
     
-    const handleContainerClick = (index) => {
-        if (movieMode) {
+    const handleContainerClick = (index, collection) => {
+        if (movieMode && collection[0].movie_id) {
             setSelectedCollection(Object.values(movieCollectionByName)[index]);
-        } else {
-            setSelectedCollection(Object.values(showCollectionByName)[index])
+        } else if (movieMode === false && collection[0].show_id) {
+            setSelectedCollection(Object.values(showCollectionByName)[index]);
         }
     }
     
@@ -76,22 +85,130 @@ const MyCollection = () => {
         setSelectedCollection(null);
     }
 
-    const handleDeleteMedia = (media_id) => {
+    const handleDeleteMedia = (collection_id) => {
         if (movieMode) {
-            console.log(`Movie deleted: ${media_id}`)
+            const updatedMovieCollectionByName = selectedCollection.filter((movie) => movie.id !== collection_id);
+            const updatedMovies = movies.filter((movie) => movie.id !== collection_id);
+            fetch(`/movie_collections/${collection_id}`, {method: "DELETE"})
+            .then(() => {
+                setSelectedCollection(updatedMovieCollectionByName);
+                setMovies(updatedMovies);
+            })
         } else {
-            console.log(`Show deleted: ${media_id}`)
+            const updatedShowCollectionByName = selectedCollection.filter((show) => show.id !== collection_id);
+            const updatedShows = shows.filter((show) => show.id !== collection_id);
+            fetch(`/show_collections/${collection_id}`, {method: "DELETE"})
+            .then(() => {
+                setSelectedCollection(updatedShowCollectionByName);
+                setShows(updatedShows);
+            })
         }
     }
-    // if (!movies || movies.length === 0) {
-    //     return <p>No movies in this collection</p>
-    // }
 
-    
+    const handleForm = () => {
+        setForm(!form);
+    }
+
+    const handleChange = (e) => {
+        const { name, value } = e.target
+        setFormData({...formData, [name]: value});
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if ((movieCollectionNames.includes(formData.name) === false) && movieMode) {
+            fetch('/movie_collections', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ ...formData, user_id: user.id })
+            })
+            .then(resp => {
+                if (resp.ok) {
+                    resp.json()
+                    .then((data) => {
+                        setFormData('');
+                        setForm(false);
+                        setMovies(movies => [...movies, data])
+                    })
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        } else if ((!movieMode) && (showCollectionNames.includes(formData.name) === false)) {
+            fetch('/show_collections', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ ...formData, user_id: user.id })
+            })
+            .then(resp => {
+                if (resp.ok) {
+                    resp.json()
+                    .then((data) => {
+                        setFormData('');
+                        setForm(false);
+                        setShows(shows => [...shows, data])
+                    })
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        } else {
+            setFormData(formData => formData.name = '');
+            console.log('Collection name exists already')
+        } 
+    }
+
+    const handleDeleteCollectionByName = (collection_name) => {
+        if (movieMode) {
+            const updatedMovies = movies.filter((movie) => movie.name !== collection_name);
+            fetch(`/users/${user.id}/movie_collections/${collection_name}`, {method: 'DELETE'})
+            .then(() => {
+                setMovies(updatedMovies);
+            })
+        } else {
+            const updatedShows = shows.filter((show) => show.name !== collection_name);
+            fetch(`/users/${user.id}/show_collections/${collection_name}`, {method: 'DELETE'})
+            .then(() => {
+                setShows(updatedShows);
+            })
+        }
+    }
+
+    const movieCollections = Object.values(movieCollectionByName).map((collection, index) => (
+        <CollectionContainer 
+            key={index}
+            movieMode={movieMode} 
+            medias={collection} 
+            name={movieCollectionNames[index]} 
+            deleteMode={deleteMode}
+            handleDeleteCollectionByName={handleDeleteCollectionByName}
+            onClick={() => handleContainerClick(index, collection)} 
+        />
+    ))
+
+    const showCollections = Object.values(showCollectionByName).map((collection, index) => (
+        <div class='collection-container'>
+            <CollectionContainer 
+                key={index} 
+                movieMode={movieMode} 
+                medias={collection} 
+                name={showCollectionNames[index]} 
+                deleteMode={deleteMode}
+                handleDeleteCollectionByName={handleDeleteCollectionByName}
+                onClick={() => handleContainerClick(index, collection)}  
+            />
+        </div>
+    ))
+
     return (
         <div> 
             <h1>My Collections</h1>
-            
             {movieMode ? (
                 selectedCollection ? (
                 <div>
@@ -99,32 +216,32 @@ const MyCollection = () => {
                     {selectedCollection.map((movie) => (
                         <MediaCard 
                             key={movie.movie.id} 
-                            id={movie.movie.id} 
+                            id={movie.id} 
                             title={movie.movie.title} 
                             image={movie.movie.image} 
                             rating={movie.movie.rating} 
                             description={movie.movie.description}
                             handleDelete={handleDeleteMedia}
-                        />
-                    ))}
+                            discoverPage={discoverPage}
+                        />)
+                    )}
                 </div>
                 ) : (
                 <div>
+                    <button onClick={handleForm} >Create New</button>
+                    <button onClick={handleDeleteMode} >Edit Collections</button>
+                    {form && (
+                        <form onSubmit={handleSubmit}>
+                            <label htmlFor='name'>New Collection Name: </label>
+                            <input id='new-coll-form' type='text' name='name' value={formData.name} onChange={handleChange}/>
+                        </form>
+                    )}
                     <div id='movie-switch'>
                         {movieMode ? <button id='underline' class='movie' >Movies</button> : <button class='movie' onClick={() => handleClick(true)} >Movies</button>}
                         {movieMode ? <button class='movie' onClick={() => handleClick(false)} >Shows</button> : <button id='underline' class='movie' >Shows</button>}
                     </div>
                     <div>
-                        {Object.values(movieCollectionByName).map((collection, index) => (
-                            <CollectionContainer 
-                                key={index}
-                                movieMode={movieMode} 
-                                medias={collection} 
-                                name={collection[0].name} 
-                                onClick={() => handleContainerClick(index)} 
-                                // onClick={() => console.log(`${index} clicked`)} 
-                            />
-                        ))}
+                        {movieCollections}
                     </div>
                 </div>
                 )
@@ -135,31 +252,33 @@ const MyCollection = () => {
                         {selectedCollection.map((show) => (
                         <MediaCard 
                             key={show.show.id} 
+                            id={show.id} 
                             title={show.show.title} 
                             image={show.show.image} 
                             rating={show.show.rating} 
                             description={show.show.description}
+                            handleDelete={handleDeleteMedia}
+                            discoverPage={discoverPage}
                         />
                     ))}
                     </div>
                     ) : (
                     <div>
+                        <button onClick={handleForm} >Create New</button>
+                        <button onClick={handleDeleteMode} >Edit Collections</button>
+                        {form && (
+                            <form onSubmit={handleSubmit}>
+                                <label htmlFor='name'>New Collection Name: </label>
+                                <input id='new-coll-form' type='text' name='name' value={formData.name} onChange={handleChange}/>
+                            </form>
+                        )}
                         <div id='movie-switch'>
                             {movieMode ? <button id='underline' class='movie' >Movies</button> : <button class='movie' onClick={() => handleClick(true)} >Movies</button>}
                             {movieMode ? <button class='movie' onClick={() => handleClick(false)} >Shows</button> : <button id='underline' class='movie' >Shows</button>}
                         </div>
                         <div>
-                        {Object.values(showCollectionByName).map((collection, index) => (
-                            <CollectionContainer 
-                                key={index} 
-                                movieMode={movieMode} 
-                                medias={collection} 
-                                name={collection[0].name} 
-                                onClick={() => handleContainerClick(index)} 
-                                // onClick={() => console.log(`${index} clicked`)} 
-                            />
-                        ))}
-                    </div>
+                            {showCollections}
+                        </div>
                     </div>
                     )
                 )
