@@ -32,10 +32,11 @@ class ShowCollectionByName(Resource):
                 return {'error': f'ShowCollByName Patch error, {str(e)}'}, 400
         return {'error': 'Could not find show collection with that name'}, 404
 
-    def delete(self, name):
+    def delete(self, id, name):
         if show_collection := ShowCollection.query.filter(and_(ShowCollection.user_id == id, ShowCollection.name == name)):
             try:
-                db.session.delete(show_collection)
+                for show in show_collection:
+                    db.session.delete(show)
                 db.session.commit()
                 return {'message': f'Show collection #{name} has been deleted'}, 200
             except Exception as e:

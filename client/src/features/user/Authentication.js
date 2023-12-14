@@ -9,7 +9,7 @@ import { fetchRegister } from './userSlice';
 import "../../styles/authentication.css";
 import {jwtDecode} from 'jwt-decode';
 
-function Authentication() {
+function Authentication({handleNewAlert, handleAlertType}) {
     const navigate = useNavigate();
     const [signUp, setSignUp] = useState(false);
     const user = useSelector(state => state.user.data);
@@ -22,49 +22,60 @@ function Authentication() {
 
     const handleClick = () => setSignUp((signUp) => !signUp);
 
-    const handleCallbackResponse = (response) => {
+    const handleCallbackResponse = async (response) => {
         console.log("Encoded JWT ID Token: " + response.credential);
-        const userObject = jwtDecode(response.credential);
-        console.log(userObject);
+        const userObjectG = jwtDecode(response.credential);
+        console.log(userObjectG);
+        const userObject = {
+            "username": userObjectG.given_name,
+            "email": userObjectG.email,
+        }
+
         // setUserGoogle(userObject);
-        const action = dispatch(fetchRegister({url: googleAuthURL, values: {id_token: response.credential}}))
+        const action = await dispatch(fetchRegister({url: googleAuthURL, values: {...userObject, id_token: response.credential}}))
         if (typeof action.payload !== 'string') {
             // setToken(action.payload.jwt_token);
             // setRefreshToken(action.payload.refresh_token);
             // navigate(`/users/${user.name}/mycollection`);
-            navigate('/discover')
+            navigate(`/users/${action.payload.id}/profile`)
             // dispatch(fetchAllMovies());
         } else {
             // show error (toast or snackbar)
         }
-}
+    }
 
+    const initGoogleSignIn = () => {
+        if (window.google && window.google.accounts) {
+            window.google.accounts.id.initialize({
+                client_id: CLIENT_ID,
+                callback: handleCallbackResponse,
+            });
+            window.google.accounts.id.renderButton(
+                document.getElementById("signInDiv"),
+                {theme: 'outline', size: 'large'}
+            )
+        } else {
+            setTimeout(initGoogleSignIn, 200);
+        }
+    }
     useEffect(() => {
         /* global google */
-        window.google.accounts.id.initialize({
-            client_id: CLIENT_ID,
-            callback: handleCallbackResponse,
+        
+        const loadGoogleScript = () => {
+            return new Promise((resolve) => {
+                const script = document.createElement("script");
+                script.src = "https://apis.google.com/js/platform.js";
+                script.async = true;
+                script.defer = true;
+                script.onload = resolve;
+                document.head.appendChild(script);
+            });
+        };
+
+        loadGoogleScript().then(() => {
+            initGoogleSignIn();
         })
-
-        window.google.accounts.id.renderButton(
-            document.getElementById("signInDiv"),
-            { theme: "outline", size: "large" }
-        );
-
-        // const loadGoogleScript = () => {
-        //     return new Promise((resolve) => {
-        //         const script = document.createElement("script");
-        //         script.src = "https://apis.google.com/js/platform.js";
-        //         script.async = true;
-        //         script.defer = true;
-        //         script.onload = resolve;
-        //         document.head.appendChild(script);
-        //     });
-        // };
-
     }, [])
-
-
 
     const signUpSchema = yup.object().shape({
         username: yup.string().required("Please enter a username"),
@@ -90,9 +101,9 @@ function Authentication() {
 
     const formik = useFormik({
         initialValues: {
-        username: "",
-        email: "",
-        password: "",
+            username: "",
+            email: "",
+            password: "",
         },
         validationSchema: signUp ? signUpSchema : logInSchema,
         onSubmit: async (values) => {
@@ -100,10 +111,13 @@ function Authentication() {
             if (typeof action.payload !== 'string') {
                 // setToken(action.payload.jwt_token);
                 // setRefreshToken(action.payload.refresh_token);
-                navigate(`/users/${user.id}/mycollection`);
+                handleNewAlert("Welcome!");
+                handleAlertType("success");
+                navigate(`/users/${user.id}/profile`);
                 // dispatch(fetchAllMovies());
             } else {
-                // show error (toast or snackbar)
+                handleNewAlert(action.payload);
+                handleAlertType("error");
             }
         }
     });

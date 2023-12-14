@@ -31,7 +31,7 @@ class Show(db.Model):
     
     @validates('rating')
     def validate_rating(self, _, value):
-        if not (isinstance(value, float) or isinstance(value, int)):
+        if not (isinstance(value, float) or isinstance(value, int) or isinstance(value, str)):
             raise TypeError(f'Rating must be a number')
         return value
 

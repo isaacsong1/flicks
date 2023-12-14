@@ -5,34 +5,39 @@ import { fetchCurrentUser } from './features/user/userSlice';
 import { clearErrors as clearUserErrors} from './features/user/userSlice';
 import Authentication from './features/user/Authentication';
 import AllMedia from './pages/AllMedia';
+import Alertbar from "./components/Alertbar";
 import Navigation from './components/Navigation';
 // import MyCollection from './pages/MyCollection';
-
-// Ideas for non-logged in user:
-// View all movies and shows that are in the database (no fetch calls)
-// Be able to generate random movie/show title to see if they wanna watch it
-// No profile page
-// No collection page
-// No connect page
-
-// For logged in user:
-// View all movies and shows that are in the database (no fetch calls) with option to add to collection
-// Be able to generate random movie/show title to see if they wanna watch it with option to add to collection
-// Profile page, shows user information
-// Collection page, shows collections with option to click into one and edit
-// Connect page with option to follow
 
 function App() {
   const user = useSelector(state => state.user.data);
   const userErrors = useSelector(state => state.user.errors);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const errors = [...userErrors];
   const errors = useMemo(() => userErrors, [userErrors]);
+  const [alert, setAlert] = useState(null);
+  const [alertType, setAlertType] = useState("");
   const clearErrorsAction = useCallback(() => {
     dispatch(clearUserErrors(''));
   }, [dispatch]);
+  // MyCollection States
+  const [movieMode, setMovieMode] = useState(true);
+  const [movies, setMovies] = useState([]);
+  const [movieCollectionNames, setMovieCollectionNames] = useState([]);
+  const [showCollectionNames, setShowCollectionNames] = useState([]);
+  const [shows, setShows] = useState([]);
+  const [movieCollectionByName, setMovieCollectionByName] = useState({});
+  const [showCollectionByName, setShowCollectionByName] = useState({});
+  const [discoverPage, setDiscoverPage] = useState(false);
 
+  // AlertBar helpers
+  const handleNewAlert = useCallback((alert) => {
+    setAlert(alert);
+  }, []);
+
+  const handleAlertType = (type) => setAlertType(type);
+
+  // MyCollection Helpers
   useEffect(() => {
     (async () => {
       if (!user) {
@@ -41,11 +46,14 @@ function App() {
           if (action.payload.flag === 'refresh') {
             // setToken(action.payload.jwt_token);
             console.log(action.payload);
+          } else {
+            setDiscoverPage(true);
+            navigate(`/users/${action.payload.user.id}/profile`);
           }
-          // dispatch(fetchAllMovies());
         }
       } else {
-        navigate('/discover');
+        setDiscoverPage(true);
+        navigate(`/users/${user.id}/profile`);
       }
     })()
   }, [user, dispatch, navigate]);
@@ -56,17 +64,34 @@ function App() {
     }
   }, [errors, clearErrorsAction]);
 
-
+  
+  const ctx = { discoverPage, setDiscoverPage, handleNewAlert, handleAlertType, movieMode, setMovieMode, movies, setMovies, movieCollectionNames, setMovieCollectionNames, showCollectionNames, setShowCollectionNames, shows, setShows, movieCollectionByName, setMovieCollectionByName, showCollectionByName, setShowCollectionByName }
+  
   if (!user) return (
     <div id='welcome'>
-      
-      <Authentication />
+      {alert && (
+        <Alertbar
+          alert={alert}
+          handleNewAlert={handleNewAlert}
+          alertType={alertType}
+          handleAlertType={handleAlertType}
+        />
+      )}
+      <Authentication handleNewAlert={handleNewAlert} handleAlertType={handleAlertType} />
     </div>
   )
   return (
     <div id='app'>
-      <Navigation />
-      <Outlet />
+      {alert && (
+        <Alertbar
+          alert={alert}
+          handleNewAlert={handleNewAlert}
+          alertType={alertType}
+          handleAlertType={handleAlertType}
+        />
+      )}
+      <Navigation setDiscoverPage={setDiscoverPage} />
+      <Outlet context={ctx} />
       {/* <MyCollection /> */}
     </div>
   )
