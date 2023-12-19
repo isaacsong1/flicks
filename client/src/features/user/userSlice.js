@@ -168,7 +168,7 @@ const userSlice = createSlice({
                     if (typeof action.payload === 'string') {
                         state.errors.push(action.payload);
                     } else {
-                        state.data = action.payload.user;
+                        state.data = action.payload;
                     }
                 }
             }

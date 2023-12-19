@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useOutletContext, useParams, useNavigate  } from 'react-router-dom';
-import { fetchPatchUser, fetchDeleteUser } from '../features/user/userSlice';
+import { fetchCurrentUser, fetchPatchUser, fetchDeleteUser } from '../features/user/userSlice';
 import { clearErrors as clearUserErrors} from '../features/user/userSlice';
 import { useFormik, Form } from "formik"
 import * as yup from "yup"
@@ -67,18 +67,26 @@ const Profile = () => {
             // await dispatch(checkToken())
             // if failed, dispatch(refreshToken())
             // if success, fire dispatch below
-            const action = await dispatch(fetchPatchUser({url, values}))
-            if (typeof action.payload !== 'string') {
-                // resp.json().then(updateUser)
-                console.log('response was ok from user patch');
-                handleNewAlert("Profile updated!");
-                handleAlertType("success");
+            const checkToken = await dispatch(fetchCurrentUser())
+            if (typeof checkToken.payload !== 'string') {
+                const action = await dispatch(fetchPatchUser({url, values}))
+                if (typeof action.payload !== 'string') {
+                    // resp.json().then(updateUser)
+                    console.log('response was ok from user patch');
+                    handleEditMode();
+                    handleNewAlert("Profile updated!");
+                    handleAlertType("success");
+                } else {
+                    // resp.json().then(errorObj => handleNewAlert(errorObj.error))
+                    console.log('response was not ok from user patch');
+                    handleNewAlert("Profile could not be updated");
+                    handleAlertType("error");
+                }
             } else {
-                // resp.json().then(errorObj => handleNewAlert(errorObj.error))
-                console.log('response was not ok from user patch');
-                handleNewAlert("Profile could not be updated");
+                handleNewAlert("Token has expired");
                 handleAlertType("error");
-            }
+            }   
+
         }
     })
     
