@@ -1,0 +1,31 @@
+.navbar {
+    height: 5vh;
+    padding: 0 3vw;
+    background-color: #ffffff50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+  /*   box-shadow: 0 0 10px white; */
+}
+
+.link {
+    font-size: 1.5em;
+    color: #dcdddd;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.link:visited {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.link:hover {
+    color: #1e90ff;
+}
+
+.active {
+    color: #1e90ff;
+    border-bottom: 1px solid #fac898;
+}

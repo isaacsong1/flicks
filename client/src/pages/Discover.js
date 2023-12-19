@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {useSelector} from 'react-redux';
 import { useOutletContext } from "react-router-dom";
 import MediaCard from '../components/MediaCard';
+import '../styles/discover.css';
 
 const Discover = () => {
     const user = useSelector(state => state.user.data);
@@ -191,46 +192,50 @@ const Discover = () => {
     ));
     
     return (
-        <div>
-            <div id='movie-switch'>
-                {movieMode ? <button id='underline' class='movie' >Movies</button> : <button class='movie' onClick={() => handleClick(true)} >Movies</button>}
-                {movieMode ? <button class='movie' onClick={() => handleClick(false)} >Shows</button> : <button id='underline' class='movie' >Shows</button>}
+        <div class='discover'>
+            <div class='content'>
+                <div id='movie-switch'>
+                    {movieMode ? <button id='underline' class='movie' >Movies</button> : <button class='movie' onClick={() => handleClick(true)} >Movies</button>}
+                    {movieMode ? <button class='movie' onClick={() => handleClick(false)} >Shows</button> : <button id='underline' class='movie' >Shows</button>}
+                </div>
+                {movieMode ? (
+                    <div>
+                        <MediaCard 
+                            id={fetchedMovie.id} 
+                            title={fetchedMovie.title} 
+                            image={fetchedMovie.image} 
+                            rating={fetchedMovie.rating} 
+                            description={fetchedMovie.description}
+                            discoverPage={discoverPage}
+                            class='mediacard'
+                        />
+                        <button onClick={handleNewMedia}>Generate New Movie</button>
+                        <select name='movie-collection-names' id='movie-collection-names' onChange={handleSelectChange} >
+                            <option value='default'>Select a Collection</option>
+                            {movieCollectionOptions}
+                        </select>
+                        <button onClick={handleAddToCollection} >Add to Collection</button>
+                    </div>
+                ) : (
+                    <div>
+                        <MediaCard 
+                            id={fetchedShow.id} 
+                            title={fetchedShow.title} 
+                            image={fetchedShow.image} 
+                            rating={fetchedShow.rating} 
+                            description={fetchedShow.description}
+                            discoverPage={discoverPage}
+                            class='mediacard'
+                        />
+                        <button onClick={handleNewMedia}>Generate New Show</button>
+                        <select name='show-collection-names' id='show-collection-names' onChange={handleSelectChange} >
+                            <option value='default'>Select a Collection</option>
+                            {showCollectionOptions}
+                        </select>
+                        <button onClick={handleAddToCollection} >Add to Collection</button>
+                    </div>
+                )}
             </div>
-            {movieMode ? (
-                <div>
-                    <MediaCard 
-                        id={fetchedMovie.id} 
-                        title={fetchedMovie.title} 
-                        image={fetchedMovie.image} 
-                        rating={fetchedMovie.rating} 
-                        description={fetchedMovie.description}
-                        discoverPage={discoverPage}
-                    />
-                    <button onClick={handleNewMedia}>Generate New Movie</button>
-                    <select name='movie-collection-names' id='movie-collection-names' onChange={handleSelectChange} >
-                        <option value='default'>Select a Collection</option>
-                        {movieCollectionOptions}
-                    </select>
-                    <button onClick={handleAddToCollection} >Add to Collection</button>
-                </div>
-            ) : (
-                <div>
-                    <MediaCard 
-                        id={fetchedShow.id} 
-                        title={fetchedShow.title} 
-                        image={fetchedShow.image} 
-                        rating={fetchedShow.rating} 
-                        description={fetchedShow.description}
-                        discoverPage={discoverPage}
-                    />
-                    <button onClick={handleNewMedia}>Generate New Show</button>
-                    <select name='show-collection-names' id='show-collection-names' onChange={handleSelectChange} >
-                        <option value='default'>Select a Collection</option>
-                        {showCollectionOptions}
-                    </select>
-                    <button onClick={handleAddToCollection} >Add to Collection</button>
-                </div>
-            )}
         </div>
     )
 }
