@@ -1,11 +1,11 @@
 .navbar {
     height: 5vh;
-    padding: 0 3vw;
-    background-color: #ffffff50;
+    padding: 0 13vw;
+    background-color: #1f1f1f;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: absolute;
+    /* position: absolute; */
   /*   box-shadow: 0 0 10px white; */
 }
 

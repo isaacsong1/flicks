@@ -7,7 +7,19 @@ import Authentication from './features/user/Authentication';
 import AllMedia from './pages/AllMedia';
 import Alertbar from "./components/Alertbar";
 import Navigation from './components/Navigation';
+import { createTheme } from '@mui/material/styles';
 // import MyCollection from './pages/MyCollection';
+
+const theme = createTheme({
+  palette: {
+    ochre: {
+      main: '#E3D026',
+      light: '#E9DB5D',
+      dark: '#A29415',
+      contrastText: '#242105',
+    },
+  },
+});
 
 function App() {
   const user = useSelector(state => state.user.data);

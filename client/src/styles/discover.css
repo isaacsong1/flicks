@@ -1,19 +1,72 @@
 .discover {
-    height: 100vh;
+    height: 95vh;
     width: 100vw;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #1f1f1f;
+    color: white;
+    font-family: 'Roboto', sans-serif;
 }
 
 .content {
-    width: 50%;
-    height: 50%;
+    width: 75%;
+    height: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: rgba(201, 201, 201, 0.144);
+}
+
+.media-cont {
+    width: 100%;
+    height: 100%;
+}
+
+.mediacard {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
 }
 
 .featured-movie {
-
+    /* margin-right: 10px;
+    margin-bottom: 10px; */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
+
+.media-media {
+    width: 30%;
+    margin-left: 5%;
+}
+
+.media-desc h3 {
+    font-size: 40px;
+    margin-bottom: 2vh;
+}
+
+
+.media-desc {
+    width: 62%;
+    margin-left: 3%;
+}
+
+.desc {
+    border-top: 1px solid rgb(105, 105, 105);
+    padding: 5px;
+    width: 92%;
+}
+
+.bottom-btns {
+    margin-left: 5%;
+    margin-top: 2vh;
+}
+
+/* #movie-collection-names {
+    width: 10vw;
+    color: white;
+} */
+

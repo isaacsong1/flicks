@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import {useSelector} from 'react-redux';
 import { useOutletContext } from "react-router-dom";
 import MediaCard from '../components/MediaCard';
+import { Button, Select, MenuItem } from '@mui/material';
+import { common } from '@mui/material/colors';
+import { styled } from '@mui/material/styles';
 import '../styles/discover.css';
+
 
 const Discover = () => {
     const user = useSelector(state => state.user.data);
@@ -10,7 +14,7 @@ const Discover = () => {
     const [fetchedMovie, setFetchedMovie] = useState({});
     const [fetchedShow, setFetchedShow] = useState({});
     const [mediaInt, setMediaInt] = useState(Math.floor(Math.random() * 100) + 1);
-    const [selectedCollection, setSelectedCollection] = useState('default');
+    const [selectedCollection, setSelectedCollection] = useState('');
     setDiscoverPage(true);
 
     useEffect(() => {
@@ -36,9 +40,20 @@ const Discover = () => {
         fetchShow();
     }, [mediaInt]);
 
+    console.log(fetchedMovie)
+
+    // const setBackgroundImg = () => {
+    //     if (fetchedMovie['image']) {
+    //         const contentBox = document.getElementsByClassName('content');
+    //         const imageUrl = fetchedMovie['image']
+    //         debugger;
+    //         contentBox.style.backgroundImage = `url('${imageUrl}')`;
+    //     }
+    // }
+
     const handleClick = (boolean) => {
         setMovieMode(boolean);
-        setSelectedCollection('default');
+        setSelectedCollection('');
     }
 
     const handleNewMedia = () => {
@@ -56,7 +71,7 @@ const Discover = () => {
     }
 
     const handleAddToCollection = () => {
-        if (selectedCollection !== 'default') {
+        if (selectedCollection !== '') {
             if (movieMode) {
                 let movieCollToPatch = null;
                 let movieToPatch = null;
@@ -184,22 +199,22 @@ const Discover = () => {
     }
 
     const movieCollectionOptions = movieCollectionNames.map(name => (
-        <option value={name}>{name}</option>
+        <MenuItem value={name}>{name}</MenuItem>
     ));
 
     const showCollectionOptions = showCollectionNames.map(name => (
-        <option value={name}>{name}</option>
+        <MenuItem value={name}>{name}</MenuItem>
     ));
     
     return (
         <div class='discover'>
             <div class='content'>
                 <div id='movie-switch'>
-                    {movieMode ? <button id='underline' class='movie' >Movies</button> : <button class='movie' onClick={() => handleClick(true)} >Movies</button>}
-                    {movieMode ? <button class='movie' onClick={() => handleClick(false)} >Shows</button> : <button id='underline' class='movie' >Shows</button>}
+                    {movieMode ? <ButtonSwitch >Movies</ButtonSwitch> : <ButtonSwitch onClick={() => handleClick(true)} >Movies</ButtonSwitch>}
+                    {movieMode ? <ButtonSwitch onClick={() => handleClick(false)} >Shows</ButtonSwitch> : <ButtonSwitch >Shows</ButtonSwitch>}
                 </div>
                 {movieMode ? (
-                    <div>
+                    <div class='media-cont'>
                         <MediaCard 
                             id={fetchedMovie.id} 
                             title={fetchedMovie.title} 
@@ -207,17 +222,18 @@ const Discover = () => {
                             rating={fetchedMovie.rating} 
                             description={fetchedMovie.description}
                             discoverPage={discoverPage}
-                            class='mediacard'
                         />
-                        <button onClick={handleNewMedia}>Generate New Movie</button>
-                        <select name='movie-collection-names' id='movie-collection-names' onChange={handleSelectChange} >
-                            <option value='default'>Select a Collection</option>
-                            {movieCollectionOptions}
-                        </select>
-                        <button onClick={handleAddToCollection} >Add to Collection</button>
+                        <div class='bottom-btns' >
+                            <Button variant='contained' onClick={handleNewMedia}>Generate New Movie</Button>
+                            <SelectColor displayEmpty inputProps={{ 'aria-label': 'Without label' }} name='movie-collection-names' id='movie-collection-names' value={selectedCollection} onChange={handleSelectChange} >
+                                <MenuItem value=""><em>Select a Collection</em></MenuItem>
+                                {movieCollectionOptions}
+                            </SelectColor>
+                            <Button variant='contained' onClick={handleAddToCollection} >Add to Collection</Button>
+                        </div>
                     </div>
                 ) : (
-                    <div>
+                    <div class='media-cont'>
                         <MediaCard 
                             id={fetchedShow.id} 
                             title={fetchedShow.title} 
@@ -225,19 +241,61 @@ const Discover = () => {
                             rating={fetchedShow.rating} 
                             description={fetchedShow.description}
                             discoverPage={discoverPage}
-                            class='mediacard'
                         />
-                        <button onClick={handleNewMedia}>Generate New Show</button>
-                        <select name='show-collection-names' id='show-collection-names' onChange={handleSelectChange} >
-                            <option value='default'>Select a Collection</option>
-                            {showCollectionOptions}
-                        </select>
-                        <button onClick={handleAddToCollection} >Add to Collection</button>
+                        <div class='bottom-btns' >
+                            <Button variant='contained' onClick={handleNewMedia}>Generate New Show</Button>
+                            <SelectColor displayEmpty inputProps={{ 'aria-label': 'Without label' }} name='show-collection-names' id='show-collection-names' value={selectedCollection} onChange={handleSelectChange} >
+                                <MenuItem value=""><em>Select a Collection</em></MenuItem>
+                                {showCollectionOptions}
+                            </SelectColor>
+                            <Button variant='contained' onClick={handleAddToCollection} >Add to Collection</Button>
+                        </div>
                     </div>
                 )}
             </div>
         </div>
     )
 }
+
+const ButtonSwitch = styled(Button)({
+    color: 'white',
+    padding: '10px',
+    boxShadow: 'none',
+    textTransform: 'none',
+    width: '5vw',
+    margin: '10px',
+    backgroundColor: '#0063cc',
+    borderColor: '#0063cc',
+    '&:hover': {
+        backgroundColor: '#0069d9',
+        borderColor: '#0062cc',
+        boxShadow: 'none',
+    },
+    '&:active': {
+        boxShadow: 'none',
+        backgroundColor: '#0062cc',
+        borderColor: '#005cbf',
+    },
+    '&:focus': {
+        boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+    },
+})
+
+const SelectColor = styled(Select)({
+    width: '10vw',
+    height: '4.2vh',
+    color: 'white',
+    borderColor: 'white',
+    // border: '1px solid #ffffff',
+    margin: '5px',
+    '&:active': {
+        border: '1px solid #ffffff',
+    },
+    '&:focus': {
+        borderRadius: 4,
+        border: '1px solid #ffffff',
+        boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+    },
+})
 
 export default Discover
