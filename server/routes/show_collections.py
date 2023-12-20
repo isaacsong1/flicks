@@ -26,6 +26,5 @@ class ShowCollections(Resource):
             serialized_show_collection = show_collection_schema.dump(new_show_collection)
             return serialized_show_collection, 201
         except Exception as e:
-            db.session.delete(new_show_collection)
-            db.session.commit()
+            db.session.rollback()
             return {'error': f'ShowColls post error, {str(e)}'}, 400

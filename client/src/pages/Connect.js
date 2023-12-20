@@ -28,6 +28,7 @@ const Connect = () => {
 
     const handleViewProfile = (clickedUserId) => {
         const uniqueMovieImages = new Set()
+        const uniqueShowImages = new Set()
         setCurrUserMedia(new Set())
         fetch(`/users/${clickedUserId}/movie_collections`)
         .then(resp => {
@@ -36,9 +37,27 @@ const Connect = () => {
                 .then(data => {
                     if (data.length) {
                         for (let obj of data) {
-                            uniqueMovieImages.add(obj.movie.image);
+                            if (obj.movie) {
+                                uniqueMovieImages.add(obj.movie['image']);
+                            }
                         }
                         setCurrUserMedia(uniqueMovieImages);
+                    }
+                })
+            }
+        })
+        fetch(`/users/${clickedUserId}/show_collections`)
+        .then(resp => {
+            if (resp.ok) {
+                resp.json()
+                .then(data => {
+                    if (data.length) {
+                        for (let obj of data) {
+                            if (obj.show) {
+                                uniqueShowImages.add(obj.show['image']);
+                            }
+                        }
+                        setCurrUserMedia(new Set([...uniqueMovieImages, ...uniqueShowImages]));
                     }
                 })
             }
@@ -46,8 +65,6 @@ const Connect = () => {
         openModal();
     }
     
-    const followerArray = []
-    const followingArray = []
     useEffect(() => {
         // const followingSet = new Set()
         user.followings.forEach(following => {
@@ -108,16 +125,16 @@ const Connect = () => {
     const filteredUsers = allUsers.filter(individualUser => individualUser.id !== user.id)
 
     const mappedUsers = filteredUsers.map(individualUser => (
-        <div key={individualUser.id} >
+        <div key={individualUser.id} class='user-box' >
             <div class='connect-users' onClick={() => handleViewProfile(individualUser.id)} >
                 <h3>{individualUser.username}</h3>
                 <p>Followers: {individualUser.followers.length}</p>
                 <p>Following: {individualUser.followings.length}</p>
             </div>
             {myFollowing.length ? (
-                myFollowing.includes(individualUser.username) ? <button onClick={() => handleUnfollow(individualUser.id, individualUser.username)} >Unfollow</button> : <button onClick={() => handleFollow(individualUser.id, individualUser.username)} >Follow</button>
+                myFollowing.includes(individualUser.username) ? <Button variant='contained' onClick={() => handleUnfollow(individualUser.id, individualUser.username)} >Unfollow</Button> : <Button variant='contained' onClick={() => handleFollow(individualUser.id, individualUser.username)} >Follow</Button>
             ) : (
-                <button onClick={() => handleFollow(individualUser.id, individualUser.username)} >Follow</button>
+                <Button variant='contained' onClick={() => handleFollow(individualUser.id, individualUser.username)} >Follow</Button>
             )}
         </div>
     ))

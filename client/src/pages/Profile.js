@@ -5,6 +5,8 @@ import { fetchCurrentUser, fetchPatchUser, fetchDeleteUser } from '../features/u
 import { clearErrors as clearUserErrors} from '../features/user/userSlice';
 import { useFormik, Form } from "formik"
 import * as yup from "yup"
+import { Button } from '@mui/material';
+import '../styles/profile.css';
 
 const Profile = () => {
     const user = useSelector(state => state.user.data);
@@ -104,76 +106,80 @@ const Profile = () => {
     }
 
     return (
-        <div>
-            <h1>{`${user.username}'s Profile`}</h1>
-            {/* <button onClick={handleEditMode} >Edit Profile</button> */}
-            <div className="profile-container" >
-            {editMode ? (
-                <div>
-                    <form className="profile-info" onSubmit={formik.handleSubmit}>
-                        <div class='inputs'>
-                            <label htmlFor='username'>Username: </label>
-                            <input type='text' name='username' value={formik.values.username} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                            {formik.errors.username && formik.touched.username ? <div className="error-message show">{formik.errors.username}</div> : null}
+        <div class='profile'>
+            <div class='profile-content'>
+                <h1>{`${user.username}'s Profile`}</h1>
+                {/* <button onClick={handleEditMode} >Edit Profile</button> */}
+                <div className="profile-container" >
+                {editMode ? (
+                    <div>
+                        <form className="profile-info" onSubmit={formik.handleSubmit}>
+                            <div class='inputs'>
+                                <label htmlFor='username'>Username: </label>
+                                <input type='text' name='username' value={formik.values.username} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                {formik.errors.username && formik.touched.username ? <div className="error-message show">{formik.errors.username}</div> : null}
+                            </div>
+                            <div class='inputs'>
+                                <label htmlFor='location'>Location: </label>
+                                <input type='text' name='location' value={formik.values.location} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                {formik.errors.location && formik.touched.location ? <div className="error-message show">{formik.errors.location}</div> : null}
+                            </div>
+                            <div class='inputs'>
+                                <label htmlFor='bio'>Bio: </label>
+                                <input type='text' name='bio' value={formik.values.bio} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                {formik.errors.bio && formik.touched.bio ? <div className="error-message show">{formik.errors.bio}</div> : null}
+                            </div>
+                            <Button variant='contained' type='submit' onClick={setEditMode}>Save Profile</Button>
+                        </form>
+                        {confirmDelete ? (
+                            <div>
+                                {'Are you sure? '}
+                                <Button variant='contained' onClick={handleDelete}>Yes</Button>
+                                <Button variant='contained' onClick={() => handleConfirmDelete(false)}>No</Button>
+                            </div>
+                        ) : (
+                            <Button variant='contained' onClick={() => handleConfirmDelete(true)}>Delete Account</Button>
+                        )}
+                    </div>
+                        ) : (
+                    <div className="profile-info">
+                        <div class='follow-list'>
+                            {followerList ? (
+                                <div>
+                                    <Button variant='contained' onClick={() => handleFollowerList(false)} >X</Button>
+                                    {user.followers.map(follower => (<h3>{follower['follower.username']}</h3>))}
+                                </div>
+                            ) : (
+                                <div onClick={() => handleFollowerList(true)} >
+                                    Followers: {user.followers.length}
+                                </div>
+                            )}
+                            {followingList ? (
+                                <div>
+                                    <Button variant='contained' onClick={() => handleFollowingList(false)} >X</Button>
+                                    {user.followings.map(following => (<h3>{following['following.username']}</h3>))}
+                                </div>
+                            ) : (
+                                <div onClick={() => handleFollowingList(true)} >
+                                    Following: {user.followings.length}
+                                </div>
+                            )}
                         </div>
-                        <div class='inputs'>
-                            <label htmlFor='location'>Location: </label>
-                            <input type='text' name='location' value={formik.values.location} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                            {formik.errors.location && formik.touched.location ? <div className="error-message show">{formik.errors.location}</div> : null}
+                        <div className="info-icon">
+                            <div>
+                                <p><b>Username:</b> {user.username}</p>
+                                <p><b>Email:</b> {user.email}</p>
+                                <p><b>Location:</b> {user.location}</p>
+                                <p><b>Bio:</b> {user.bio}</p>
+                            </div>
                         </div>
-                        <div class='inputs'>
-                            <label htmlFor='bio'>Bio: </label>
-                            <input type='text' name='bio' value={formik.values.bio} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                            {formik.errors.bio && formik.touched.bio ? <div className="error-message show">{formik.errors.bio}</div> : null}
-                        </div>
-                        <input className='edit-save-btn' type='submit' value={'Save Profile'} onClick={setEditMode} />
-                    </form>
-                    {confirmDelete ? (
-                        <div>
-                            {'Are you sure? '}
-                            <button onClick={handleDelete}>Yes</button>
-                            <button onClick={() => handleConfirmDelete(false)}>No</button>
-                        </div>
-                    ) : (
-                        <button onClick={() => handleConfirmDelete(true)}>Delete Account</button>
-                    )}
-                </div>
-                    ) : (
-                <div className="profile-info">
-                    {followerList ? (
-                        <div>
-                            <button onClick={() => handleFollowerList(false)} >X</button>
-                            {user.followers.map(follower => (<h3>{follower['follower.username']}</h3>))}
-                        </div>
-                    ) : (
-                        <div onClick={() => handleFollowerList(true)} >
-                            Followers: {user.followers.length}
-                        </div>
-                    )}
-                    {followingList ? (
-                        <div>
-                            <button onClick={() => handleFollowingList(false)} >X</button>
-                            {user.followings.map(following => (<h3>{following['following.username']}</h3>))}
-                        </div>
-                    ) : (
-                        <div onClick={() => handleFollowingList(true)} >
-                            Following: {user.followings.length}
-                        </div>
-                    )}
-                    <div className="info-icon">
-                        <div>
-                            <p><b>Username:</b> {user.username}</p>
-                            <p><b>Email:</b> {user.email}</p>
-                            <p><b>Location:</b> {user.location}</p>
-                            <p><b>Bio:</b> {user.bio}</p>
+                        <div className="profile-button">
+                            {user.id === parseInt(id) ? (editMode ? null :  <Button variant='contained' className='edit-save-btn' onClick={handleEditMode} >Edit Profile</Button>) : null}
                         </div>
                     </div>
-                    <div className="profile-button">
-                        {user.id === parseInt(id) ? (editMode ? null :  <button className='edit-save-btn' onClick={handleEditMode} >Edit Profile</button>) : null}
-                    </div>
+                )}
                 </div>
-            )}
-        </div>
+            </div>
         
         
         </div>

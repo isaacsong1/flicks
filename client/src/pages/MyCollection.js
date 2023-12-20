@@ -289,8 +289,10 @@ const MyCollection = () => {
                             </div>
                             ) : (
                             <div class='not-selected' >
-                                <Button variant='contained' onClick={handleForm} >Create New</Button>
-                                <Button variant='contained' onClick={handleDeleteMode} >Edit Collections</Button>
+                                <div class='collection-form' >
+                                    <Button variant='contained' onClick={handleForm} >Create New</Button>
+                                    <Button variant='contained' onClick={handleDeleteMode} >Edit Collections</Button>
+                                </div>
                                 {form && (
                                     <form onSubmit={handleSubmit}>
                                         <label htmlFor='name'>New Collection Name: </label>
