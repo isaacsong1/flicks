@@ -125,17 +125,19 @@ const Connect = () => {
     const filteredUsers = allUsers.filter(individualUser => individualUser.id !== user.id)
 
     const mappedUsers = filteredUsers.map(individualUser => (
-        <div key={individualUser.id} class='user-box' >
-            <div class='connect-users' onClick={() => handleViewProfile(individualUser.id)} >
+        <div key={individualUser.id} class='user-box'>
+            <div class='connect-users'  onClick={() => handleViewProfile(individualUser.id)}>
                 <h3>{individualUser.username}</h3>
                 <p>Followers: {individualUser.followers.length}</p>
                 <p>Following: {individualUser.followings.length}</p>
             </div>
-            {myFollowing.length ? (
-                myFollowing.includes(individualUser.username) ? <Button variant='contained' onClick={() => handleUnfollow(individualUser.id, individualUser.username)} >Unfollow</Button> : <Button variant='contained' onClick={() => handleFollow(individualUser.id, individualUser.username)} >Follow</Button>
-            ) : (
-                <Button variant='contained' onClick={() => handleFollow(individualUser.id, individualUser.username)} >Follow</Button>
-            )}
+            <div class='follow-btns'>
+                {myFollowing.length ? (
+                    myFollowing.includes(individualUser.username) ? <Button variant='contained' onClick={() => handleUnfollow(individualUser.id, individualUser.username)} >Unfollow</Button> : <Button variant='contained' onClick={() => handleFollow(individualUser.id, individualUser.username)} >Follow</Button>
+                ) : (
+                    <Button variant='contained' onClick={() => handleFollow(individualUser.id, individualUser.username)} >Follow</Button>
+                )}
+            </div>
         </div>
     ))
 
@@ -145,8 +147,15 @@ const Connect = () => {
                 <h1>Connect with Others</h1>
                 {mappedUsers}
                 <div id='user-modal'>
-                    <Button variant='contained' id='close' onClick={() => closeModal()} >X</Button>
-                    {userMedia.length ? userMedia.map(image => <img src={image} alt={image} />) : <h3>No media added yet.</h3>}
+                    <div class='modal-size'>
+                        <div class='modal-btn'>
+                            <Button variant='contained' id='close' onClick={() => closeModal()} >X</Button>
+                        </div>
+                        <h1 class='modal-title'>Added Media</h1>
+                        <div class='modal-img'>
+                            {userMedia.length ? userMedia.map(image => <img src={image} alt={image} />) : <h3>No media added yet.</h3>}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
