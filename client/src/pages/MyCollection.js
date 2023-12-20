@@ -79,6 +79,7 @@ const MyCollection = () => {
     const handleContainerClick = (index, collection) => {
         if (movieMode && collection[0].movie_id) {
             setSelectedCollection(Object.values(movieCollectionByName)[index]);
+
         } else if (movieMode === false && collection[0].show_id) {
             setSelectedCollection(Object.values(showCollectionByName)[index]);
         }
@@ -226,81 +227,85 @@ const MyCollection = () => {
 
     return (
         <div class='mycollection'> 
-            <div id='movie-switch'>
-                {movieMode ? <ButtonSwitch >Movies</ButtonSwitch> : <ButtonSwitch onClick={() => handleClick(true)} >Movies</ButtonSwitch>}
-                {movieMode ? <ButtonSwitch onClick={() => handleClick(false)} >Shows</ButtonSwitch> : <ButtonSwitch >Shows</ButtonSwitch>}
-            </div>
-            <h1>My Collections</h1>
-            {movieMode ? (
-                selectedCollection ? (
-                <div>
-                    <button onClick={handleExitCollection}>X</button>
-                    {selectedCollection.map((movie) => (
-                        <MediaCard 
-                            key={movie.movie.id} 
-                            id={movie.id} 
-                            title={movie.movie.title} 
-                            image={movie.movie.image} 
-                            rating={movie.movie.rating} 
-                            description={movie.movie.description}
-                            handleDelete={handleDeleteMedia}
-                            discoverPage={discoverPage}
-                        />)
-                    )}
-                </div>
-                ) : (
-                <div>
-                    {form && (
-                        <form onSubmit={handleSubmit}>
-                            <label htmlFor='name'>New Collection Name: </label>
-                            <input id='new-coll-form' type='text' name='name' value={formData.name} onChange={handleChange}/>
-                        </form>
-                    )}
-                    <Button variant='contained' onClick={handleForm} >Create New</Button>
-                    <Button variant='contained' onClick={handleDeleteMode} >Edit Collections</Button>
-                    <div>
-                        {movieCollections}
+            <div class='collection-content'>
+                {selectedCollection ? null : 
+                    <div id='movie-switch'>
+                        {movieMode ? <ButtonSwitch >Movies</ButtonSwitch> : <ButtonSwitch onClick={() => handleClick(true)} >Movies</ButtonSwitch>}
+                        {movieMode ? <ButtonSwitch onClick={() => handleClick(false)} >Shows</ButtonSwitch> : <ButtonSwitch >Shows</ButtonSwitch>}
                     </div>
-                </div>
-                )
-            ) : (
-                selectedCollection ? (
-                    <div>
-                        <button onClick={handleExitCollection}>X</button>
-                        {selectedCollection.map((show) => (
-                        <MediaCard 
-                            key={show.show.id} 
-                            id={show.id} 
-                            title={show.show.title} 
-                            image={show.show.image} 
-                            rating={show.show.rating} 
-                            description={show.show.description}
-                            handleDelete={handleDeleteMedia}
-                            discoverPage={discoverPage}
-                        />
-                    ))}
-                    </div>
-                    ) : (
-                    <div>
-                        <button onClick={handleForm} >Create New</button>
-                        <button onClick={handleDeleteMode} >Edit Collections</button>
-                        {form && (
-                            <form onSubmit={handleSubmit}>
-                                <label htmlFor='name'>New Collection Name: </label>
-                                <input id='new-coll-form' type='text' name='name' value={formData.name} onChange={handleChange}/>
-                            </form>
-                        )}
-                        {/* <div id='movie-switch'>
-                            {movieMode ? <ButtonSwitch >Movies</ButtonSwitch> : <ButtonSwitch onClick={() => handleClick(true)} >Movies</ButtonSwitch>}
-                            {movieMode ? <ButtonSwitch onClick={() => handleClick(false)} >Shows</ButtonSwitch> : <ButtonSwitch >Shows</ButtonSwitch>}
-                        </div> */}
-                        <div>
-                            {showCollections}
+                }
+                <div class='collections'>
+                    {selectedCollection ? null : <h1>My Collections</h1>}
+                    {movieMode ? (
+                        selectedCollection ? (
+                        <div class='selected' >
+                            <Button variant='contained' onClick={handleExitCollection}>X</Button>
+                            {selectedCollection.map((movie) => (
+                                <MediaCard 
+                                    key={movie.movie.id} 
+                                    id={movie.id} 
+                                    title={movie.movie.title} 
+                                    image={movie.movie.image} 
+                                    rating={movie.movie.rating} 
+                                    description={movie.movie.description}
+                                    handleDelete={handleDeleteMedia}
+                                    discoverPage={discoverPage}
+                                />)
+                            )}
                         </div>
-                    </div>
-                    )
-                )
-            }
+                        ) : (
+                        <div class='not-selected' >
+                            <div class='collection-form' >
+                                <Button variant='contained' onClick={handleForm} >Create New</Button>
+                                <Button variant='contained' onClick={handleDeleteMode} >Edit Collections</Button>
+                            </div>
+                            {form && (
+                                <form onSubmit={handleSubmit}>
+                                    <label htmlFor='name'>New Collection Name: </label>
+                                    <input id='new-coll-form' type='text' name='name' value={formData.name} onChange={handleChange}/>
+                                </form>
+                            )}
+                            <div class='collection-box' >
+                                {movieCollections}
+                            </div>
+                        </div>
+                        )
+                    ) : (
+                        selectedCollection ? (
+                            <div class='selected' >
+                                <Button variant='contained' onClick={handleExitCollection}>X</Button>
+                                {selectedCollection.map((show) => (
+                                <MediaCard 
+                                    key={show.show.id} 
+                                    id={show.id} 
+                                    title={show.show.title} 
+                                    image={show.show.image} 
+                                    rating={show.show.rating} 
+                                    description={show.show.description}
+                                    handleDelete={handleDeleteMedia}
+                                    discoverPage={discoverPage}
+                                />
+                            ))}
+                            </div>
+                            ) : (
+                            <div class='not-selected' >
+                                <Button variant='contained' onClick={handleForm} >Create New</Button>
+                                <Button variant='contained' onClick={handleDeleteMode} >Edit Collections</Button>
+                                {form && (
+                                    <form onSubmit={handleSubmit}>
+                                        <label htmlFor='name'>New Collection Name: </label>
+                                        <input id='new-coll-form' type='text' name='name' value={formData.name} onChange={handleChange}/>
+                                    </form>
+                                )}
+                                <div class='collection-box' >
+                                    {showCollections}
+                                </div>
+                            </div>
+                            )
+                        )
+                    }
+                </div>
+            </div>
         </div>
     )
 }

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPatchUser } from '../features/user/userSlice';
 import { Button } from '@mui/material';
+import { useNavigate, useHistory } from "react-router-dom";
+import { setUser } from '../features/user/userSlice';
 import '../styles/connect.css';
 
 const Connect = () => {
@@ -10,6 +11,8 @@ const Connect = () => {
     const [allUsers, setAllUsers] = useState([]);
     const [myFollowing, setMyFollowing] = useState([]);
     const [currUserMedia, setCurrUserMedia] = useState(new Set());
+    const [dummyState, setDummyState] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch('/users')
@@ -21,15 +24,7 @@ const Connect = () => {
                 console.log('fetch all users error')
             }
         })
-    }, [user])
-
-    const handleUnfollow = (userToUnfollowId) => {
-        fetch(`/user/${user.id}/following/${userToUnfollowId}`, {method: "DELETE"})
-    }
-
-    const handleFollow = () => {
-
-    }
+    }, [user, dummyState])
 
     const handleViewProfile = (clickedUserId) => {
         const uniqueMovieImages = new Set()
@@ -54,12 +49,11 @@ const Connect = () => {
     const followerArray = []
     const followingArray = []
     useEffect(() => {
+        // const followingSet = new Set()
         user.followings.forEach(following => {
-            // console.log(following['following.username'])
-            // followerArray.push(following['following.username'])
-            // console.log(followerArray)
-            setMyFollowing(currArray => [...currArray, following['following.username']])
+            setMyFollowing(currFollowing => [...currFollowing, following['following.username']])
         })
+        // setMyFollowing([followingSet])
     }, [user])
 
     const openModal = () => {
@@ -70,6 +64,39 @@ const Connect = () => {
         document.getElementById('user-modal').style.display = 'none';
         setCurrUserMedia(new Set());
     }
+
+    const handleUnfollow = (unfollowId, unfollowUsername) => {
+        fetch(`/user/${user.id}/following/${unfollowId}`, {method: "DELETE"})
+        .then(() => {
+            setMyFollowing(currFollowing => currFollowing.filter(username => username !== unfollowUsername))
+            // setDummyState(currState => !currState);
+            fetch(`/users/${user.id}`)
+            .then(resp => {
+                if (resp.ok) {
+                    resp.json()
+                    .then(data => dispatch(setUser({...data})))
+                    navigate('/connect')
+                }
+            })
+        })
+    }
+
+    const handleFollow = (followId, followUsername) => {
+        fetch(`/user/${user.id}/following/${followId}`, {method: "POST"})
+        .then(() => {
+            setMyFollowing(currFollowing => [...currFollowing, followUsername])
+            // setDummyState(currState => !currState);
+            fetch(`/users/${user.id}`)
+            .then(resp => {
+                if (resp.ok) {
+                    resp.json()
+                    .then(data => dispatch(setUser({...data})))
+                    navigate('/connect')
+                }
+            })
+        })
+    }
+    console.log(myFollowing)
 
     let userMedia = []
     if (currUserMedia.size) {
@@ -88,20 +115,22 @@ const Connect = () => {
                 <p>Following: {individualUser.followings.length}</p>
             </div>
             {myFollowing.length ? (
-                myFollowing.includes(individualUser.username) ? <button>Unfollow</button> : <button>Follow</button>
+                myFollowing.includes(individualUser.username) ? <button onClick={() => handleUnfollow(individualUser.id, individualUser.username)} >Unfollow</button> : <button onClick={() => handleFollow(individualUser.id, individualUser.username)} >Follow</button>
             ) : (
-                null
+                <button onClick={() => handleFollow(individualUser.id, individualUser.username)} >Follow</button>
             )}
         </div>
     ))
 
     return (
-        <div>
-            <h1>Connect with Others</h1>
-            {mappedUsers}
-            <div id='user-modal'>
-                <Button variant='contained' id='close' onClick={() => closeModal()} >X</Button>
-                {userMedia.length ? userMedia.map(image => <img src={image} alt={image} />) : <h3>No media added yet.</h3>}
+        <div class='connect'>
+            <div class='connect-content'>
+                <h1>Connect with Others</h1>
+                {mappedUsers}
+                <div id='user-modal'>
+                    <Button variant='contained' id='close' onClick={() => closeModal()} >X</Button>
+                    {userMedia.length ? userMedia.map(image => <img src={image} alt={image} />) : <h3>No media added yet.</h3>}
+                </div>
             </div>
         </div>
     )

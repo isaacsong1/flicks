@@ -1,8 +1,62 @@
 .mycollection {
     height: 95vh;
     width: 100vw;
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #1f1f1f;
     color: white;
     font-family: 'Roboto', sans-serif;
+    /* overflow-y: scroll; */
+    overflow-x: hidden;
+}
+
+.collection-content {
+    width: 75%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* background-color: rgba(201, 201, 201, 0.055); */
+}
+
+.collections {
+    width: 100%;
+    height: 100%;
+}
+
+.collection-content #movie-switch {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(201, 201, 201, 0.055);
+}
+
+.collections h1 {
+    background-color: rgba(201, 201, 201, 0.055);
+    padding-bottom: 15px;
+}
+
+.selected {
+    background-color: rgba(201, 201, 201, 0.055);
+}
+
+.not-selected {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(201, 201, 201, 0.055);
+}
+
+.collection-box {
+    padding-top: 15px;
+}
+
+.not-selected form {
+    padding-top: 10px;
+}
+
+.not-selected input {
+    padding: 5px;
 }

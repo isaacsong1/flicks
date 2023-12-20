@@ -27,7 +27,6 @@ class FollowerById(Resource):
     def delete(self, user_id, following_id):
         if unfollow := Follower.query.filter(and_(Follower.follower_id == user_id, Follower.following_id == following_id)).first():
             try: 
-                import ipdb; ipdb.set_trace()
                 db.session.delete(unfollow)
                 db.session.commit()
                 return {'message': f'User {following_id} has been unfollowed'}
