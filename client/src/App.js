@@ -56,6 +56,7 @@ function App() {
       } else {
         setDiscoverPage(true);
         navigate(`/users/${user.id}/mycollection`);
+        // location/history
       }
     })()
   }, [user, dispatch, navigate]);

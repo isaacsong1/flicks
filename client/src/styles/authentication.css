@@ -3,7 +3,7 @@
     height: 100vh;
     /* background: linear-gradient(to bottom, #3ac6ec, #06586e); */
     /* background-color: #114063; */
-    background-image: linear-gradient(to right top, #114063, #1c4f7b, #295f95, #386faf, #4a7fc9, #7a85d4, #a28ada, #c790dc, #ef93c3, #ff9fab, #ffb29b, #fac898);
+    /* background-image: linear-gradient(to right top, #114063, #1c4f7b, #295f95, #386faf, #4a7fc9, #7a85d4, #a28ada, #c790dc, #ef93c3, #ff9fab, #ffb29b, #fac898); */
     display: block;
     font-family: 'Oswald', sans-serif;
     font-weight: 300;
@@ -40,7 +40,7 @@
 }
 
 #account-form h1 {
-    color: #212529;
+    color: white;
     /* position: relative; */
     text-align: center;
     top: 3vh;
@@ -54,7 +54,7 @@
 }
 
 #account-form label {
-    color: #212529;
+    color: white;
 }
 
 #account-form input {
@@ -64,6 +64,8 @@
     padding: 10px;
     border-radius: 4px;
     border: 1px solid #343A40;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 #register-switch {
@@ -121,4 +123,10 @@
     border-radius: 24px;
     width: 70%;
     margin-top: 24px;
+}
+
+#signInDiv {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
 }
