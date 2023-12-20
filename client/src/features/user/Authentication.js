@@ -37,7 +37,7 @@ function Authentication({handleNewAlert, handleAlertType}) {
             // setToken(action.payload.jwt_token);
             // setRefreshToken(action.payload.refresh_token);
             // navigate(`/users/${user.name}/mycollection`);
-            navigate(`/users/${action.payload.id}/profile`)
+            navigate(`/users/${action.payload.id}/mycollection`)
             // dispatch(fetchAllMovies());
         } else {
             // show error (toast or snackbar)
@@ -113,7 +113,7 @@ function Authentication({handleNewAlert, handleAlertType}) {
                 // setRefreshToken(action.payload.refresh_token);
                 handleNewAlert("Welcome!");
                 handleAlertType("success");
-                navigate(`/users/${user.id}/profile`);
+                navigate(`/users/${user.id}/mycollection`);
                 // dispatch(fetchAllMovies());
             } else {
                 handleNewAlert(action.payload);

@@ -7,6 +7,8 @@ import Authentication from './features/user/Authentication';
 import AllMedia from './pages/AllMedia';
 import Alertbar from "./components/Alertbar";
 import Navigation from './components/Navigation';
+// import { createTheme } from '@mui/material/styles';
+
 // import MyCollection from './pages/MyCollection';
 
 function App() {
@@ -48,12 +50,12 @@ function App() {
             console.log(action.payload);
           } else {
             setDiscoverPage(true);
-            navigate(`/users/${action.payload.user.id}/profile`);
+            navigate(`/users/${action.payload.user.id}/mycollection`);
           }
         }
       } else {
         setDiscoverPage(true);
-        navigate(`/users/${user.id}/profile`);
+        navigate(`/users/${user.id}/mycollection`);
       }
     })()
   }, [user, dispatch, navigate]);

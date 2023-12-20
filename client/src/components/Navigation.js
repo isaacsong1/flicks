@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../features/user/userSlice';
+import '../styles/navigation.css';
 
 const Navigation = ({setDiscoverPage}) => {
     const user = useSelector(state => state.user.data);
@@ -19,7 +20,7 @@ const Navigation = ({setDiscoverPage}) => {
 
     return (
         <nav class='navbar'>
-            <div>
+            <div class='link-left' >
                 <NavLink class='link' to={"/discover"} >
                     {setDiscoverPage(true)}
                     Discover
@@ -33,7 +34,7 @@ const Navigation = ({setDiscoverPage}) => {
                     My Collection
                 </NavLink>
             </div>
-            <div>
+            <div class='link-right' >
                 <NavLink class='link logout' to={'/'} onClick={handleLogout} >
                     {setDiscoverPage(false)}
                     Logout
