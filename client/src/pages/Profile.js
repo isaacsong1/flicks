@@ -73,14 +73,11 @@ const Profile = () => {
             if (typeof checkToken.payload !== 'string') {
                 const action = await dispatch(fetchPatchUser({url, values}))
                 if (typeof action.payload !== 'string') {
-                    // resp.json().then(updateUser)
-                    console.log('response was ok from user patch');
                     handleEditMode();
                     handleNewAlert("Profile updated!");
                     handleAlertType("success");
                 } else {
                     // resp.json().then(errorObj => handleNewAlert(errorObj.error))
-                    console.log('response was not ok from user patch');
                     handleNewAlert("Profile could not be updated");
                     handleAlertType("error");
                 }

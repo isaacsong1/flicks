@@ -34,9 +34,6 @@ function Authentication({handleNewAlert, handleAlertType}) {
         // setUserGoogle(userObject);
         const action = await dispatch(fetchRegister({url: googleAuthURL, values: {...userObject, id_token: response.credential}}))
         if (typeof action.payload !== 'string') {
-            // setToken(action.payload.jwt_token);
-            // setRefreshToken(action.payload.refresh_token);
-            // navigate(`/users/${user.name}/mycollection`);
             navigate(`/users/${action.payload.id}/mycollection`)
             // dispatch(fetchAllMovies());
         } else {
