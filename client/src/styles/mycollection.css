@@ -75,10 +75,33 @@
     margin-right: 5%;
     padding-top: 10px;
     padding-bottom: 10px;
+    background-color: rgba(240, 248, 255, 0.075);
+    border-radius: 4px;
+    margin-top: 3px;
+}
+
+.container-content {
+    margin-left: 10px
 }
 
 .mediaContainer:hover {
     background-color: rgba(201, 201, 201, 0.055);
     cursor: pointer;
     border-radius: 4px;
+}
+
+.collection-button {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+.selected .mediacard {
+    margin-bottom: 10px;
+}
+
+.delete-collection {
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
 }

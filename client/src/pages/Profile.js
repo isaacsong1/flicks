@@ -115,17 +115,23 @@ const Profile = () => {
                     <div>
                         <form className="profile-info" onSubmit={formik.handleSubmit}>
                             <div class='inputs'>
-                                <label htmlFor='username'>Username: </label>
+                                <div class='labels' >
+                                    <label htmlFor='username'>Username: </label>
+                                </div>
                                 <input type='text' name='username' value={formik.values.username} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                                 {formik.errors.username && formik.touched.username ? <div className="error-message show">{formik.errors.username}</div> : null}
                             </div>
                             <div class='inputs'>
-                                <label htmlFor='location'>Location: </label>
+                                <div class='labels' >
+                                    <label htmlFor='location'>Location: </label>
+                                </div>
                                 <input type='text' name='location' value={formik.values.location} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                                 {formik.errors.location && formik.touched.location ? <div className="error-message show">{formik.errors.location}</div> : null}
                             </div>
                             <div class='inputs'>
-                                <label htmlFor='bio'>Bio: </label>
+                                <div class='labels' >
+                                    <label htmlFor='bio'>Bio: </label>
+                                </div>
                                 <input type='text' name='bio' value={formik.values.bio} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                                 {formik.errors.bio && formik.touched.bio ? <div className="error-message show">{formik.errors.bio}</div> : null}
                             </div>
@@ -134,8 +140,8 @@ const Profile = () => {
                         {confirmDelete ? (
                             <div>
                                 {'Are you sure? '}
-                                <Button variant='contained' onClick={handleDelete}>Yes</Button>
-                                <Button variant='contained' onClick={() => handleConfirmDelete(false)}>No</Button>
+                                <Button variant='contained' sx={{marginLeft: '10px'}} onClick={handleDelete}>Yes</Button>
+                                <Button variant='contained' sx={{marginLeft: '10px'}} onClick={() => handleConfirmDelete(false)}>No</Button>
                             </div>
                         ) : (
                             <Button variant='contained' onClick={() => handleConfirmDelete(true)}>Delete Account</Button>
@@ -143,38 +149,45 @@ const Profile = () => {
                     </div>
                         ) : (
                     <div className="profile-info">
-                        <div class='follow-list'>
-                            {followerList ? (
-                                <div>
-                                    <Button variant='contained' onClick={() => handleFollowerList(false)} >X</Button>
-                                    {user.followers.map(follower => (<h3>{follower['follower.username']}</h3>))}
-                                </div>
-                            ) : (
-                                <div onClick={() => handleFollowerList(true)} >
-                                    Followers: {user.followers.length}
-                                </div>
-                            )}
-                            {followingList ? (
-                                <div>
-                                    <Button variant='contained' onClick={() => handleFollowingList(false)} >X</Button>
-                                    {user.followings.map(following => (<h3>{following['following.username']}</h3>))}
-                                </div>
-                            ) : (
-                                <div onClick={() => handleFollowingList(true)} >
-                                    Following: {user.followings.length}
-                                </div>
-                            )}
+                        <div class='profile-header'>
+                            <div className="profile-button">
+                                {user.id === parseInt(id) ? (editMode ? null :  <Button variant='contained' className='edit-save-btn' onClick={handleEditMode} >Edit Profile</Button>) : null}
+                            </div>
+                            <div class='follow-list'>
+                                {followerList ? (
+                                    <div class='follow-modal'>
+                                        <div class='follow-button'>
+                                            <Button onClick={() => handleFollowerList(false)} >X</Button>
+                                        </div>
+                                        {user.followers.map(follower => (<h3>{follower['follower.username']}</h3>))}
+                                    </div>
+                                ) : (
+                                    <div class='follower-box' onClick={() => handleFollowerList(true)} >
+                                        <p>Followers</p>
+                                        <p>{user.followers.length}</p>
+                                    </div>
+                                )}
+                                {followingList ? (
+                                    <div class='follow-modal'>
+                                        <div class='follow-button'>
+                                            <Button onClick={() => handleFollowingList(false)} >X</Button>
+                                        </div>
+                                        {user.followings.map(following => (<h3>{following['following.username']}</h3>))}
+                                    </div>
+                                ) : (
+                                    <div class='following-box' onClick={() => handleFollowingList(true)} >
+                                        <p>Following</p>
+                                        <p>{user.followings.length}</p>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                         <div className="info-icon">
-                            <div>
-                                <p><b>Username:</b> {user.username}</p>
+                            <div class='user-info'>
                                 <p><b>Email:</b> {user.email}</p>
                                 <p><b>Location:</b> {user.location}</p>
                                 <p><b>Bio:</b> {user.bio}</p>
                             </div>
-                        </div>
-                        <div className="profile-button">
-                            {user.id === parseInt(id) ? (editMode ? null :  <Button variant='contained' className='edit-save-btn' onClick={handleEditMode} >Edit Profile</Button>) : null}
                         </div>
                     </div>
                 )}

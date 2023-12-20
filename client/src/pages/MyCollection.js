@@ -69,6 +69,7 @@ const MyCollection = () => {
 
     const handleClick = (boolean) => {
         setMovieMode(boolean);
+        setForm(false);
         setDeleteMode(false);
     };
 
@@ -239,7 +240,9 @@ const MyCollection = () => {
                     {movieMode ? (
                         selectedCollection ? (
                         <div class='selected' >
-                            <Button variant='contained' onClick={handleExitCollection}>X</Button>
+                            <div class='collection-button'>
+                                <Button variant='contained' onClick={handleExitCollection}>X</Button>
+                            </div>
                             {selectedCollection.map((movie) => (
                                 <MediaCard 
                                     key={movie.movie.id} 
@@ -256,7 +259,7 @@ const MyCollection = () => {
                         ) : (
                         <div class='not-selected' >
                             <div class='collection-form' >
-                                <Button variant='contained' onClick={handleForm} >Create New</Button>
+                                <Button variant='contained' sx={{marginRight: '10px'}} onClick={handleForm} >Create New</Button>
                                 <Button variant='contained' onClick={handleDeleteMode} >Edit Collections</Button>
                             </div>
                             {form && (
@@ -273,7 +276,9 @@ const MyCollection = () => {
                     ) : (
                         selectedCollection ? (
                             <div class='selected' >
-                                <Button variant='contained' onClick={handleExitCollection}>X</Button>
+                                <div class='collection-button'>
+                                    <Button variant='contained' onClick={handleExitCollection}>X</Button>
+                                </div>
                                 {selectedCollection.map((show) => (
                                 <MediaCard 
                                     key={show.show.id} 
@@ -290,7 +295,7 @@ const MyCollection = () => {
                             ) : (
                             <div class='not-selected' >
                                 <div class='collection-form' >
-                                    <Button variant='contained' onClick={handleForm} >Create New</Button>
+                                    <Button variant='contained' sx={{marginRight: '10px'}} onClick={handleForm} >Create New</Button>
                                     <Button variant='contained' onClick={handleDeleteMode} >Edit Collections</Button>
                                 </div>
                                 {form && (
