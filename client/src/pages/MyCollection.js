@@ -3,6 +3,9 @@ import {useSelector} from 'react-redux';
 import { useOutletContext } from "react-router-dom";
 import CollectionContainer from '../features/collection/CollectionContainer';
 import MediaCard from '../components/MediaCard';
+import { Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import '../styles/mycollection.css';
 
 const initialValue = {
     name: ""
@@ -222,7 +225,11 @@ const MyCollection = () => {
     ))
 
     return (
-        <div> 
+        <div class='mycollection'> 
+            <div id='movie-switch'>
+                {movieMode ? <ButtonSwitch >Movies</ButtonSwitch> : <ButtonSwitch onClick={() => handleClick(true)} >Movies</ButtonSwitch>}
+                {movieMode ? <ButtonSwitch onClick={() => handleClick(false)} >Shows</ButtonSwitch> : <ButtonSwitch >Shows</ButtonSwitch>}
+            </div>
             <h1>My Collections</h1>
             {movieMode ? (
                 selectedCollection ? (
@@ -243,18 +250,14 @@ const MyCollection = () => {
                 </div>
                 ) : (
                 <div>
-                    <button onClick={handleForm} >Create New</button>
-                    <button onClick={handleDeleteMode} >Edit Collections</button>
                     {form && (
                         <form onSubmit={handleSubmit}>
                             <label htmlFor='name'>New Collection Name: </label>
                             <input id='new-coll-form' type='text' name='name' value={formData.name} onChange={handleChange}/>
                         </form>
                     )}
-                    <div id='movie-switch'>
-                        {movieMode ? <button id='underline' class='movie' >Movies</button> : <button class='movie' onClick={() => handleClick(true)} >Movies</button>}
-                        {movieMode ? <button class='movie' onClick={() => handleClick(false)} >Shows</button> : <button id='underline' class='movie' >Shows</button>}
-                    </div>
+                    <Button variant='contained' onClick={handleForm} >Create New</Button>
+                    <Button variant='contained' onClick={handleDeleteMode} >Edit Collections</Button>
                     <div>
                         {movieCollections}
                     </div>
@@ -287,10 +290,10 @@ const MyCollection = () => {
                                 <input id='new-coll-form' type='text' name='name' value={formData.name} onChange={handleChange}/>
                             </form>
                         )}
-                        <div id='movie-switch'>
-                            {movieMode ? <button id='underline' class='movie' >Movies</button> : <button class='movie' onClick={() => handleClick(true)} >Movies</button>}
-                            {movieMode ? <button class='movie' onClick={() => handleClick(false)} >Shows</button> : <button id='underline' class='movie' >Shows</button>}
-                        </div>
+                        {/* <div id='movie-switch'>
+                            {movieMode ? <ButtonSwitch >Movies</ButtonSwitch> : <ButtonSwitch onClick={() => handleClick(true)} >Movies</ButtonSwitch>}
+                            {movieMode ? <ButtonSwitch onClick={() => handleClick(false)} >Shows</ButtonSwitch> : <ButtonSwitch >Shows</ButtonSwitch>}
+                        </div> */}
                         <div>
                             {showCollections}
                         </div>
@@ -301,5 +304,30 @@ const MyCollection = () => {
         </div>
     )
 }
+
+const ButtonSwitch = styled(Button)({
+    color: 'white',
+    padding: '10px',
+    boxShadow: 'none',
+    textTransform: 'none',
+    width: '5vw',
+    margin: '10px',
+    backgroundColor: '#0063cc',
+    borderColor: '#0063cc',
+    '&:hover': {
+        backgroundColor: '#0069d9',
+        borderColor: '#0062cc',
+        boxShadow: 'none',
+    },
+    '&:active': {
+        boxShadow: 'none',
+        backgroundColor: '#0062cc',
+        borderColor: '#005cbf',
+    },
+    '&:focus': {
+        boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+    },
+})
+
 
 export default MyCollection

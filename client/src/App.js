@@ -7,19 +7,9 @@ import Authentication from './features/user/Authentication';
 import AllMedia from './pages/AllMedia';
 import Alertbar from "./components/Alertbar";
 import Navigation from './components/Navigation';
-import { createTheme } from '@mui/material/styles';
-// import MyCollection from './pages/MyCollection';
+// import { createTheme } from '@mui/material/styles';
 
-const theme = createTheme({
-  palette: {
-    ochre: {
-      main: '#E3D026',
-      light: '#E9DB5D',
-      dark: '#A29415',
-      contrastText: '#242105',
-    },
-  },
-});
+// import MyCollection from './pages/MyCollection';
 
 function App() {
   const user = useSelector(state => state.user.data);
@@ -60,12 +50,12 @@ function App() {
             console.log(action.payload);
           } else {
             setDiscoverPage(true);
-            navigate(`/users/${action.payload.user.id}/profile`);
+            navigate(`/users/${action.payload.user.id}/mycollection`);
           }
         }
       } else {
         setDiscoverPage(true);
-        navigate(`/users/${user.id}/profile`);
+        navigate(`/users/${user.id}/mycollection`);
       }
     })()
   }, [user, dispatch, navigate]);

@@ -1,31 +1,48 @@
 .navbar {
     height: 5vh;
     padding: 0 13vw;
-    background-color: #1f1f1f;
+    background-color: #111111;
     display: flex;
     justify-content: space-between;
     align-items: center;
     /* position: absolute; */
   /*   box-shadow: 0 0 10px white; */
+    font-family: 'Roboto', sans-serif;
 }
 
-.link {
-    font-size: 1.5em;
+.link-left a {
+    font-size: 1.3em;
+    color: #dcdddd;
+    text-decoration: none;
+    padding: 10px;
+}
+.link-right a {
+    font-size: 1.3em;
     color: #dcdddd;
     text-decoration: none;
     padding: 10px;
 }
 
-.link:visited {
+.link-left:visited {
     color: inherit;
     text-decoration: inherit;
 }
 
-.link:hover {
-    color: #1e90ff;
+.link-right:visited {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.link-left a:hover {
+    background-color: rgba(136, 136, 136, 0.164);
+    border-radius: 2px;
+}
+
+.link-right a:hover {
+    background-color: rgba(136, 136, 136, 0.164);
+    border-radius: 2px;
 }
 
 .active {
-    color: #1e90ff;
-    border-bottom: 1px solid #fac898;
+    border-bottom: 1px solid #ffe923;
 }

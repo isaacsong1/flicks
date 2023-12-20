@@ -20,7 +20,7 @@ const Navigation = ({setDiscoverPage}) => {
 
     return (
         <nav class='navbar'>
-            <div>
+            <div class='link-left' >
                 <NavLink class='link' to={"/discover"} >
                     {setDiscoverPage(true)}
                     Discover
@@ -34,7 +34,7 @@ const Navigation = ({setDiscoverPage}) => {
                     My Collection
                 </NavLink>
             </div>
-            <div>
+            <div class='link-right' >
                 <NavLink class='link logout' to={'/'} onClick={handleLogout} >
                     {setDiscoverPage(false)}
                     Logout
