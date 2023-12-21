@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@mui/material';
-import { useNavigate, useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { setUser } from '../features/user/userSlice';
 import '../styles/connect.css';
 
@@ -11,7 +11,6 @@ const Connect = () => {
     const [allUsers, setAllUsers] = useState([]);
     const [myFollowing, setMyFollowing] = useState([]);
     const [currUserMedia, setCurrUserMedia] = useState(new Set());
-    const [dummyState, setDummyState] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,7 +23,7 @@ const Connect = () => {
                 console.log('fetch all users error')
             }
         })
-    }, [user, dummyState])
+    }, [user])
 
     const handleViewProfile = (clickedUserId) => {
         const uniqueMovieImages = new Set()
@@ -66,11 +65,9 @@ const Connect = () => {
     }
     
     useEffect(() => {
-        // const followingSet = new Set()
         user.followings.forEach(following => {
             setMyFollowing(currFollowing => [...currFollowing, following['following.username']])
         })
-        // setMyFollowing([followingSet])
     }, [user])
 
     const openModal = () => {
@@ -113,7 +110,6 @@ const Connect = () => {
             })
         })
     }
-    console.log(myFollowing)
 
     let userMedia = []
     if (currUserMedia.size) {

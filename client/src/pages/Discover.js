@@ -24,7 +24,8 @@ const Discover = () => {
                 const data = await resp.json();
                 setFetchedMovie(data);
             } catch (error) {
-                console.log(`Error fetching movie: ${error}`)
+                handleNewAlert("Could not fetch movie");
+                handleAlertType("error");
             }
         }
         const fetchShow = async () => {
@@ -33,23 +34,13 @@ const Discover = () => {
                 const data = await resp.json();
                 setFetchedShow(data);
             } catch (error) {
-                console.log(`Error fetching shows: ${error}`)
+                handleNewAlert("Could not fetch show");
+                handleAlertType("error");
             }
         }
         fetchMovie();
         fetchShow();
     }, [mediaInt]);
-
-    console.log(fetchedMovie)
-
-    // const setBackgroundImg = () => {
-    //     if (fetchedMovie['image']) {
-    //         const contentBox = document.getElementsByClassName('content');
-    //         const imageUrl = fetchedMovie['image']
-    //         debugger;
-    //         contentBox.style.backgroundImage = `url('${imageUrl}')`;
-    //     }
-    // }
 
     const handleClick = (boolean) => {
         setMovieMode(boolean);
@@ -128,11 +119,11 @@ const Discover = () => {
                             handleNewAlert("Movie was added successfully!");
                             handleAlertType("success");
                         } catch (error) {
-                            console.log(`Error fetching movies: ${error}`);
+                            handleNewAlert("Could not fetch movies");
+                            handleAlertType("error");
                         }
                     }
                     patchMovieCollById();
-                    // debugger;
                 } else {
                     handleNewAlert("Movie is already in collection");
                     handleAlertType("error");
@@ -167,7 +158,8 @@ const Discover = () => {
                             handleNewAlert("Show was added successfully");
                             handleAlertType("success");
                         } catch (error) {
-                            console.log(`Error fetching shows: ${error}`);
+                            handleNewAlert("Could not fetch shows");
+                            handleAlertType("error");
                         }
                     }
                     postShowCollById();
@@ -263,6 +255,7 @@ const ButtonSwitch = styled(Button)({
     boxShadow: 'none',
     textTransform: 'none',
     width: '5vw',
+    height: '4vh',
     margin: '10px',
     backgroundColor: '#0063cc',
     borderColor: '#0063cc',

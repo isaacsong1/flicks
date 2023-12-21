@@ -55,7 +55,7 @@ function App() {
         }
       } else {
         setDiscoverPage(true);
-        navigate(`/users/${user.id}/mycollection`);
+        navigate(window.history.back());
         // location/history
       }
     })()
@@ -95,7 +95,6 @@ function App() {
       )}
       <Navigation setDiscoverPage={setDiscoverPage} />
       <Outlet context={ctx} />
-      {/* <MyCollection /> */}
     </div>
   )
 }

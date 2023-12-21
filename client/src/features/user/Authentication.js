@@ -13,9 +13,7 @@ function Authentication({handleNewAlert, handleAlertType}) {
     const navigate = useNavigate();
     const [signUp, setSignUp] = useState(false);
     const user = useSelector(state => state.user.data);
-    const [userGoogle, setUserGoogle] = useState({});
     const dispatch = useDispatch();
-  // const history = useHistory();
     const googleAuthURL = "/googleauth";
 
     const CLIENT_ID = process.env.REACT_APP_G_CLIENT_ID;

@@ -143,6 +143,9 @@ const MyCollection = () => {
                         handleNewAlert("New collection has been added");
                         handleAlertType("success");
                     })
+                } else {
+                    handleNewAlert("Collection name must be between 3 and 20 characters");
+                    handleAlertType("error");
                 }
             })
             .catch(error => {
