@@ -50,7 +50,8 @@ function App() {
         }
       } else {
         setDiscoverPage(true);
-        navigate(window.history.back());
+        // navigate(window.history.back());
+        navigate(`/users/${user.id}/mycollection`);
         // location/history
       }
     })()
