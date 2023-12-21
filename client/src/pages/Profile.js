@@ -65,10 +65,6 @@ const Profile = () => {
         },
         validationSchema: profileSchema,
         onSubmit: async (values) => {
-            // before patch
-            // await dispatch(checkToken())
-            // if failed, dispatch(refreshToken())
-            // if success, fire dispatch below
             const checkToken = await dispatch(fetchCurrentUser())
             if (typeof checkToken.payload !== 'string') {
                 const action = await dispatch(fetchPatchUser({url, values}))
@@ -106,7 +102,6 @@ const Profile = () => {
         <div class='profile'>
             <div class='profile-content'>
                 <h1>{`${user.username}'s Profile`}</h1>
-                {/* <button onClick={handleEditMode} >Edit Profile</button> */}
                 <div className="profile-container" >
                 {editMode ? (
                     <div>
