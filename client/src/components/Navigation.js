@@ -49,7 +49,3 @@ const Navigation = ({setDiscoverPage}) => {
 }
 
 export default Navigation
-// {/* to={'/discover'} */}
-// {/* to={'/connect'} */}
-// {/* to={'/users/${user.id}/mycollection'} */}
-// {/* to={'/users/${user.id}/profile'} */}

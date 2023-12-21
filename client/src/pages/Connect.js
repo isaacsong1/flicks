@@ -83,7 +83,6 @@ const Connect = () => {
         fetch(`/user/${user.id}/following/${unfollowId}`, {method: "DELETE"})
         .then(() => {
             setMyFollowing(currFollowing => currFollowing.filter(username => username !== unfollowUsername))
-            // setDummyState(currState => !currState);
             fetch(`/users/${user.id}`)
             .then(resp => {
                 if (resp.ok) {
@@ -99,7 +98,6 @@ const Connect = () => {
         fetch(`/user/${user.id}/following/${followId}`, {method: "POST"})
         .then(() => {
             setMyFollowing(currFollowing => [...currFollowing, followUsername])
-            // setDummyState(currState => !currState);
             fetch(`/users/${user.id}`)
             .then(resp => {
                 if (resp.ok) {

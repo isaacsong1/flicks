@@ -31,14 +31,6 @@ class MovieCollection(db.Model):
             return value
         else:
             raise ValueError('User ID must be from a valid user')
-    
-    # @validates('movie_id')
-    # def validate_movieid(self, _, value):
-    #     if value and db.session.get(Movie, value):
-    #         return value
-    #     else:
-    #         raise ValueError('Movie ID must be from a valid movie')
 
-    # repr
     def __repr__(self):
         return f'<MovieCollection #{self.id} >'

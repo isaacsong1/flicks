@@ -15,4 +15,3 @@ class UserSchema(ma.SQLAlchemySchema):
     followings = fields.List(fields.Nested('FollowerSchema'))
     movie_collections = fields.List(fields.Nested('MovieCollectionSchema', only=('id', 'name', 'movie_id',)))
     show_collections = fields.List(fields.Nested('ShowCollectionSchema', only=('id', 'name', 'show_id',)))
-    # movie_collections = fields.List(fields.Nested('MovieCollectionSchema', only=('name',), many=True))

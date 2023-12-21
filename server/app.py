@@ -9,11 +9,6 @@ from flask_restful import Resource
 
 # Add your model imports
 from models.user import User
-# from models.follower import Follower
-# from models.movie import Movie
-# from models.show import Show
-# from models.movie_collection import MovieCollection
-# from models.show_collection import ShowCollection
 
 # Route imports
 #! Authentication
@@ -44,7 +39,6 @@ from routes.users import Users
 
 # Add resources
 #! Authentication
-# api.add_resource(CheckSession, '/checksession')
 api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout')
 api.add_resource(Register, '/register')

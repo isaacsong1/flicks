@@ -8,5 +8,3 @@ class FollowerSchema(ma.SQLAlchemySchema):
         model = Follower
         load_instance = True
         fields = ['follower_id', 'following_id', 'follower.username', 'following.username']
-
-    # user = fields.Nested(UserSchema)

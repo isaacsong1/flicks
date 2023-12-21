@@ -31,8 +31,6 @@
 }
 
 .featured-movie {
-    /* margin-right: 10px;
-    margin-bottom: 10px; */
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -65,8 +63,4 @@
     margin-top: 2vh;
 }
 
-/* #movie-collection-names {
-    width: 10vw;
-    color: white;
-} */
 

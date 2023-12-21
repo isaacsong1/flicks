@@ -14,9 +14,6 @@ user_schema = UserSchema(session=db.session)
 class UserById(Resource):
     def get(self, id):
         if id and (user := db.session.get(User, id)):
-            # user_schema = UserSchema(only=('id', 'username', 'email', 'location', 'bio', 'created_at', 'followers.follower.id', 'followers.follower.username', 'followings.following.id', 'followings.following.username'))
-            # import ipdb; ipdb.set_trace()
-            # user.to_dict(only=('id', 'username', 'email', 'location', 'bio', 'created_at', 'followers.follower.id', 'followers.follower.username', 'following.following.id', 'following.following.username',)), 200
             return user_schema.dump(user), 200
         return {'error': 'Could not find that user'}, 404
 

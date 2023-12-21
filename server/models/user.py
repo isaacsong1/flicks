@@ -64,15 +64,6 @@ class User(db.Model):
             raise ValueError(f'Bio must be between 5 and 100 characters')
         return value
 
-    # add later
-    # @validates('genres')
-    # def validate_genres(self, _, value):
-    #     if not isinstance(value, str):
-    #         raise TypeError(f'Genres must be a string')
-    #     elif len(value) < 2 or len(value) > 20:
-    #         raise ValueError(f'Genres must be between 2 and 20 characters')
-    #     return value
-
     # Password hashing
     @hybrid_property
     def password_hash(self):

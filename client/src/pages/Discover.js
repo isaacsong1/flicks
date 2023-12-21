@@ -279,7 +279,6 @@ const SelectColor = styled(Select)({
     height: '4.2vh',
     color: 'white',
     borderColor: 'white',
-    // border: '1px solid #ffffff',
     margin: '5px',
     '&:active': {
         border: '1px solid #ffffff',

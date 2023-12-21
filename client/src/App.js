@@ -4,12 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCurrentUser } from './features/user/userSlice';
 import { clearErrors as clearUserErrors} from './features/user/userSlice';
 import Authentication from './features/user/Authentication';
-import AllMedia from './pages/AllMedia';
 import Alertbar from "./components/Alertbar";
 import Navigation from './components/Navigation';
-// import { createTheme } from '@mui/material/styles';
-
-// import MyCollection from './pages/MyCollection';
 
 function App() {
   const user = useSelector(state => state.user.data);
@@ -46,7 +42,6 @@ function App() {
         const action = await dispatch(fetchCurrentUser());
         if (typeof action.payload !== 'string') {
           if (action.payload.flag === 'refresh') {
-            // setToken(action.payload.jwt_token);
             console.log(action.payload);
           } else {
             setDiscoverPage(true);

@@ -1,5 +1,3 @@
-import {useSelector} from 'react-redux';
-import CollectionCard from './CollectionCard';
 import { Button } from '@mui/material';
 import '../../styles/mycollection.css';
 
