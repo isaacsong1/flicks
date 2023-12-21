@@ -33,7 +33,6 @@ CLIENT_ID = os.environ.get('G_CLIENT_ID')
 class GoogleAuth(Resource):
     def post(self):
         try:
-            # import ipdb; ipdb.set_trace()
             # Get user data
             data = request.json
             token = data.get('id_token')

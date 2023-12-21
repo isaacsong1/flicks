@@ -9,6 +9,5 @@ movie_schema = MovieSchema(session=db.session)
 class MovieById(Resource):
     def get(self, id):
         if movie := db.session.get(Movie, id):
-            # movie_schema = MovieSchema()
             return movie_schema.dump(movie), 200
         return {'error': 'Could not find that movie'}, 404
