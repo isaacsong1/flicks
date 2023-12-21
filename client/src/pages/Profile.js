@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useOutletContext, useParams, useNavigate  } from 'react-router-dom';
 import { fetchCurrentUser, fetchPatchUser, fetchDeleteUser } from '../features/user/userSlice';
 import { clearErrors as clearUserErrors} from '../features/user/userSlice';
-import { useFormik, Form } from "formik"
+import { useFormik } from "formik"
 import * as yup from "yup"
 import { Button } from '@mui/material';
 import '../styles/profile.css';
@@ -73,7 +73,6 @@ const Profile = () => {
                     handleNewAlert("Profile updated!");
                     handleAlertType("success");
                 } else {
-                    // resp.json().then(errorObj => handleNewAlert(errorObj.error))
                     handleNewAlert("Profile could not be updated");
                     handleAlertType("error");
                 }
@@ -185,8 +184,6 @@ const Profile = () => {
                 )}
                 </div>
             </div>
-        
-        
         </div>
     )
 }

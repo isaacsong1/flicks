@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-// import { useOutletContext } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { fetchRegister } from './userSlice';
-// import * as snackbar from "snackbar";
 import "../../styles/authentication.css";
 import {jwtDecode} from 'jwt-decode';
 
@@ -33,9 +31,9 @@ function Authentication({handleNewAlert, handleAlertType}) {
         const action = await dispatch(fetchRegister({url: googleAuthURL, values: {...userObject, id_token: response.credential}}))
         if (typeof action.payload !== 'string') {
             navigate(`/users/${action.payload.id}/mycollection`)
-            // dispatch(fetchAllMovies());
         } else {
-            // show error (toast or snackbar)
+            handleNewAlert("Could not sign in with Google");
+            handleAlertType("error");
         }
     }
 
@@ -104,12 +102,9 @@ function Authentication({handleNewAlert, handleAlertType}) {
         onSubmit: async (values) => {
             const action = await dispatch(fetchRegister({url, values}))
             if (typeof action.payload !== 'string') {
-                // setToken(action.payload.jwt_token);
-                // setRefreshToken(action.payload.refresh_token);
                 handleNewAlert("Welcome!");
                 handleAlertType("success");
                 navigate(`/users/${user.id}/mycollection`);
-                // dispatch(fetchAllMovies());
             } else {
                 handleNewAlert(action.payload);
                 handleAlertType("error");
@@ -121,12 +116,8 @@ function Authentication({handleNewAlert, handleAlertType}) {
             <div id='content'>
                 <h1>Flicks</h1>
                 <div id="register-switch">
-                    {/* {signUp ? <h2>Create your free account</h2> : <h2>Log in here</h2>} */}
-                    {/* <h3>{signUp ? 'Already a member?' : 'Not a member?'}</h3>
-                    <button onClick={handleClick}>{signUp ? 'Log In!' : 'Register now!'}</button> */}
                     {signUp ? <button class='signup' onClick={() => handleClick(true)} >Login</button> : <button id='underline' class='signup' >Login</button>}
                     {signUp ? <button id='underline' class='signup' >Register</button> : <button class='signup' onClick={() => handleClick(false)} >Register</button>}
-                    {/* <button class='signup'>Register</button> */}
                 </div>
                 <form onSubmit={formik.handleSubmit}>
                     <div class='inputs'>
