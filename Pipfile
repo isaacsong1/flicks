@@ -20,6 +20,8 @@ flask-jwt-extended = "*"
 flask-smorest = "*"
 google-auth = "*"
 requests = "*"
+gunicorn = "*"
+psycopg2 = "*"
 
 [requires]
 python_full_version = "3.8.13"

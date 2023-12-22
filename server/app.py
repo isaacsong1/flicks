@@ -4,7 +4,7 @@
 from app_setup import app, db, api, jwt
 
 # Remote library imports
-from flask import request
+from flask import render_template
 from flask_restful import Resource
 
 # Add your model imports
@@ -72,9 +72,15 @@ def user_lookup_callback(_jwt_header, jwt_data):
     identity = jwt_data['sub']
     return db.session.get(User, identity)
 
+# Add routes for deployment
+@app.route('/discover')
+@app.route('/connect')
+@app.route('/users/<int:id>/mycollection')
+@app.route('/users/<int:id>/profile')
+
 @app.route('/')
-def index():
-    return '<h1>Project Server</h1>'
+def index(id=0):
+    return render_template("index.html")
 
 
 if __name__ == '__main__':

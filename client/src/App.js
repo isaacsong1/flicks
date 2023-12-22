@@ -49,8 +49,16 @@ function App() {
           }
         }
       } else {
-        setDiscoverPage(true);
-        navigate(window.history.back());
+        if (window.location.pathname === '/connect') {
+          navigate('/connect');
+        } else if (window.location.pathname === `/users/${user.id}/profile`) {
+          navigate(`/users/${user.id}/profile`);
+        } else {
+          navigate(`/users/${user.id}/mycollection`);
+        }
+        // setDiscoverPage(true);
+        // navigate(window.history.back());
+        
         // location/history
       }
     })()
