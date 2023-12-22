@@ -56,10 +56,6 @@ function App() {
         } else {
           navigate(`/users/${user.id}/mycollection`);
         }
-        // setDiscoverPage(true);
-        // navigate(window.history.back());
-        
-        // location/history
       }
     })()
   }, [user, dispatch, navigate]);
