@@ -17,6 +17,8 @@
 - This is a full-stack web application that allows a user to keep track of movies and shows in collections and connect with users to see what they have added to their collections
 - This project was made to complete the assignment `Phase 5 Capstone Project` for the `SE-West-091123` class for the [Flatiron](https://flatironschool.com/) Software Engineering Boot Camp
 
+- [Deployed Website](https://flicks-deploy.onrender.com/)
+
 ---
 
 ## Starting the application
