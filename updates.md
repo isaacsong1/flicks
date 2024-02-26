@@ -17,3 +17,9 @@ This file will be designated to version logs and future updates I can make. I am
 ### Connect Page
 - Displays all users with option to follow/unfollow and click to see movies they have added (Modal design can look better, a hover design for viewing user's media, separate follow button from profile click, display user's follower/following count)
 
+### My Collection Page
+- Buttons to switch from movie to shows (Toggle feature can be set for the user instead of state)
+- Create new collection button: Shows text input box (Input box could be designed better, maybe modal?)
+- Edit collection button: Shows remove buttons within collection card (can be changed to 'X') **BUG**: Clicking remove navigates user into the collection
+- Collection card: Clicking in shows all media added to the collection (Card design can be improved, Could combine all collections with a tag showing movie or show)
+
