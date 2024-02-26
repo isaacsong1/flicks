@@ -12,15 +12,16 @@ import os
 load_dotenv()  # take environment variables from .env.
 
 app = Flask(
-    __name__,
-    static_url_path='',
-    static_folder='../client/build',
-    template_folder='../client/build'
+    __name__
 )
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
+    # static_url_path='',
+    # static_folder='../client/build',
+    # template_folder='../client/build'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
-# app.secret_key = os.environ.get('APP_SECRET')
+app.secret_key = os.environ.get('APP_SECRET')
 app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
 app.config["PROPAGATE_EXCEPTIONS"] = True
 app.config['CLIENT_ID'] = os.environ.get('G_CLIENT_ID')

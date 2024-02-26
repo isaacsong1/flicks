@@ -73,14 +73,16 @@ def user_lookup_callback(_jwt_header, jwt_data):
     return db.session.get(User, identity)
 
 # Add routes for deployment
-@app.route('/discover')
-@app.route('/connect')
-@app.route('/users/<int:id>/mycollection')
-@app.route('/users/<int:id>/profile')
+# @app.route('/discover')
+# @app.route('/connect')
+# @app.route('/users/<int:id>/mycollection')
+# @app.route('/users/<int:id>/profile')
 
 @app.route('/')
-def index(id=0):
-    return render_template("index.html")
+def index():
+    return '<h1>Project Server</h1>'
+# def index(id=0):
+#     return render_template("index.html")
 
 
 if __name__ == '__main__':

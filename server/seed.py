@@ -33,18 +33,16 @@ if __name__ == '__main__':
 
         print('Seeding users...')
         users =[]
-        usernames = ['sac', 'phlyde', 'reub', 'dopamin', 'ethan', 'tobae', 'testuser1', 'testuser2']
+        usernames = ['Ryan', 'phlyde', 'reub', 'dopamin', 'ethan', 'tobae']
         emails = [
-            'sac@email.com', 
+            'ryan@email.com', 
             'phlyde@email.com', 
             'reub@email.com', 
             'dopamin@email.com', 
             'ethan@email.com', 
             'tobae@email.com',
-            'testuser1@email.com',
-            'testuser2@email.com'
             ]
-        for i in range(8):
+        for i in range(6):
             user = User(
                 username=usernames[i],
                 email=emails[i]
@@ -59,8 +57,6 @@ if __name__ == '__main__':
         sac1 = Follower(follower_id=users[0].id, following_id=users[1].id)
         sac2 = Follower(follower_id=users[0].id, following_id=users[2].id)
         sac3 = Follower(follower_id=users[0].id, following_id=users[3].id)
-        sac4 = Follower(follower_id=users[0].id, following_id=users[6].id)
-        sac5 = Follower(follower_id=users[0].id, following_id=users[7].id)
         # phlyde following sac, reubs
         phlyde1 = Follower(follower_id=users[1].id, following_id=users[0].id)
         phlyde2 = Follower(follower_id=users[1].id, following_id=users[2].id)
@@ -77,28 +73,13 @@ if __name__ == '__main__':
         # tobae following dopamin, ethan
         tobae1 = Follower(follower_id=users[5].id, following_id=users[3].id)
         tobae2 = Follower(follower_id=users[5].id, following_id=users[4].id)
-        # testuser1 following sac, testuser2
-        testuser1 = Follower(follower_id=users[6].id, following_id=users[0].id)
-        testuser2 = Follower(follower_id=users[6].id, following_id=users[7].id)
-        # testuser2 following sac, testuser1
-        testuser3 = Follower(follower_id=users[7].id, following_id=users[0].id)
-        testuser4 = Follower(follower_id=users[7].id, following_id=users[6].id)
-        followers = [sac1, sac2, sac3, sac4, sac5, phlyde1, phlyde2, reubs1, reubs2, dopamin1, dopamin2, dopamin3, ethan1, ethan2, tobae1, tobae2, testuser1, testuser2, testuser3, testuser4]
+        followers = [sac1, sac2, sac3, phlyde1, phlyde2, reubs1, reubs2, dopamin1, dopamin2, dopamin3, ethan1, ethan2, tobae1, tobae2]
         db.session.add_all(followers)
         db.session.commit()
 
         print('Seeding movies...')
         movies = all_media.get('movies')
         for i in movies:
-            # import ipdb; ipdb.set_trace()
-            # movie_title = i.title
-            # movie_image=i.image
-            # movie_rating=i.rating
-            # movie_description=i.description
-            # movie_title = i['title']
-            # movie_image=i['image']
-            # movie_rating=i['rating']
-            # movie_description=i['description']
             movie_title = i.get('title')
             movie_image=i.get('image')
             movie_rating=i.get('rating')
@@ -146,12 +127,10 @@ if __name__ == '__main__':
         mc8 = MovieCollection(name='favs', user_id=users[0].id, movie_id=6)
         mc9 = MovieCollection(name='favs', user_id=users[0].id, movie_id=7)
         mc10 = MovieCollection(name='favs', user_id=users[0].id, movie_id=8)
-        mc11 = MovieCollection(name='main', user_id=users[6].id, movie_id=6)
-        mc12 = MovieCollection(name='main', user_id=users[7].id, movie_id=7)
         mc13 = MovieCollection(name='delete', user_id=users[0].id, movie_id=14)
         mc14 = MovieCollection(name='delete', user_id=users[0].id, movie_id=20)
         mc15 = MovieCollection(name='delete', user_id=users[0].id, movie_id=21)
-        db.session.add_all([mc, mc1, mc2, mc3, mc4, mc5, mc6, mc7, mc8, mc9, mc10, mc11, mc12, mc13, mc14, mc15])
+        db.session.add_all([mc, mc1, mc2, mc3, mc4, mc5, mc6, mc7, mc8, mc9, mc10, mc13, mc14, mc15])
         db.session.commit()
 
         print('Seeding show collections...')
@@ -165,9 +144,7 @@ if __name__ == '__main__':
         sc7 = ShowCollection(name='favs', user_id=users[0].id, show_id=2)
         sc8 = ShowCollection(name='favs', user_id=users[0].id, show_id=4)
         sc9 = ShowCollection(name='favs', user_id=users[0].id, show_id=1)
-        sc10 = ShowCollection(name='main', user_id=users[6].id, show_id=2)
-        sc11 = ShowCollection(name='main', user_id=users[7].id, show_id=3)
-        db.session.add_all([sc, sc2, sc3, sc4, sc5, sc6, sc7, sc8, sc9, sc10, sc11])
+        db.session.add_all([sc, sc2, sc3, sc4, sc5, sc6, sc7, sc8, sc9])
         db.session.commit()
 
         print('Done seeding!')
