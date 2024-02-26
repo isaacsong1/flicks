@@ -23,3 +23,7 @@ This file will be designated to version logs and future updates I can make. I am
 - Edit collection button: Shows remove buttons within collection card (can be changed to 'X') **BUG**: Clicking remove navigates user into the collection
 - Collection card: Clicking in shows all media added to the collection (Card design can be improved, Could combine all collections with a tag showing movie or show)
 
+### Profile Page
+- Shows minimal information about the user (Design can be improved a lot)
+- Edit profile button: **BUG**: Save button refreshes page and navigates to collection page(Fix)
+- Follower/Following button: Shows users following/follower (Can have click feature for user to navigate to their page or show modal)
