@@ -27,3 +27,13 @@ This file will be designated to version logs and future updates I can make. I am
 - Shows minimal information about the user (Design can be improved a lot)
 - Edit profile button: **BUG**: Save button refreshes page and navigates to collection page(Fix)
 - Follower/Following button: Shows users following/follower (Can have click feature for user to navigate to their page or show modal)
+
+### Overall
+- Fix routing (May need to restructure how React router was set up to avoid glimpses of unwanted pages and better protection for when logged in or not)
+- Tweak visual design (Fit movie/show theme a little or add some colors to make the website easier to look at and not just dull gray)
+- Collection changes (Creating new collection can have a checkbox to make main collection or not, clicking a user only shows their main collection)
+- Like feature (User can like movies instead of adding to collection, add movie id under likes)
+- User profile card (Add a card to isolate user information)
+- Trending movies: Movies liked most ?
+- Genres to media
+- Recommendation feature
